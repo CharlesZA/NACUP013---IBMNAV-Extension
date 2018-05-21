@@ -1,0 +1,23 @@
+{
+  "id": "203af39d-36dc-4ea9-8a14-2d5e9f48a1a1",
+  "name": "NACUP013 - NAC.IBMNAV",
+  "publisher": "NATIONAL AIRWAYS CORPORATION",
+  "brief": "NACUP013 - Communication structure between IBM and NAV",
+  "description": "This application is responsible for processing IBM iSeries files for NAV.",
+  "version": "1.0.0.0",
+  "compatibilityId": "1.0.0.0",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "logo.bmp",
+  "capabilities": [],
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "11.0.0.0",
+  "application": "11.0.0.0",
+  "idRange": {
+    "from": 50202,
+    "to": 50299
+  }
+}
