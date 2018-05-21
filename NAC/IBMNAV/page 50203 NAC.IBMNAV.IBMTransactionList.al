@@ -4,6 +4,7 @@ page 50203 "NAC.IBMNAV.IBMTransactionList"
 {
     PageType = List;
     SourceTable = "NAC.IBMNAV.IBMTransaction";
+    Editable = true;
 
     layout
     {
@@ -14,6 +15,14 @@ page 50203 "NAC.IBMNAV.IBMTransactionList"
                 field(Code;Code)
                 {
                     
+                }
+                field(Description;Description)
+                {
+
+                }
+                field(Blocked;Blocked)
+                {
+
                 }
             }
         }

@@ -26,17 +26,24 @@ table 50203 "NAC.IBMNAV.IBMTransaction"
 
     procedure SetupDefaults();
     var
-        IBMTransactionCode : Record "NAC.IBMNAV.IBMTransaction";
     begin
         /// This procedure will setup all the default codes used for integrating transactions.
 
         /// ToDo: Add the additional codes here
+        AddSetupDefault('POPI','Supplier invoice from AMASIS',false);
+        AddSetupDefault('SOPI','Customer invoice from AMASIS',false);
+        //AddSetupDefault('POPI','Supplier invoice from AMASIS',false); // and so forth
+
+    end;
+
+    local procedure AddSetupDefault(defaultCode:Code[10];defaultDescription:Text[50];blocked:Boolean);
+    var
+        IBMTransactionCode : Record "NAC.IBMNAV.IBMTransaction";   
+    begin
         IBMTransactionCode.Init;
-        IBMTransactionCode.Code := 'POPI';
-        IBMTransactionCode.Description := 'Supplier Invoice in AMASIS';
-        IBMTransactionCode.Blocked := false;
+        IBMTransactionCode.Code := defaultCode;
+        IBMTransactionCode.Description := defaultDescription;
+        IBMTransactionCode.Blocked := blocked;
         if IBMTransactionCode.Insert(FALSE) = false then begin end;
-
-
     end;
 }
