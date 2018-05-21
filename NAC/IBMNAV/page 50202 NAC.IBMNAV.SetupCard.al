@@ -5,17 +5,19 @@ page 50202 "NAC.IBMNAV.SetupCard"
     PageType = Card;
     SourceTable = "NAC.IBMNAV.Setup";
     DeleteAllowed = false;
-    InsertAllowed = false;
+//    InsertAllowed = false;
     ModifyAllowed = true;
 
     layout
     {
         area(content)
         {
-            group(GroupName)
+            group(General)
             {
+                Caption='General';
                 field("Data Batch FileName";DataBatchFileName)
                 {
+                    
                     
                 }
                 field("Data Response FileName";DataResponseFileName)
