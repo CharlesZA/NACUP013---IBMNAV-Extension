@@ -3,7 +3,7 @@
 
 table 50205 "NAC.IBMNAV.IFRET"
 {
-    DataClassification = CustomerContent;
+    //DataClassification = CustomerContent;
     DataPerCompany = FALSE;
     Description = 'Represents return information sent back to IBM';
     

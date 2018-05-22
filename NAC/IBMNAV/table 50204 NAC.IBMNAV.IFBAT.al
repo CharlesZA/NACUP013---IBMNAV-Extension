@@ -4,7 +4,7 @@
 
 table 50204 "NAC.IBMNAV.IFBAT"
 {
-    DataClassification = CustomerContent;
+    //DataClassification = CustomerContent;
     DataPerCompany=true;
     Description = 'This table represents the data batch file received from IBM after it has been imported';
     
