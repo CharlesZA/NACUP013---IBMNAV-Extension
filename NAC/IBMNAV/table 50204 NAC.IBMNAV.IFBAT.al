@@ -12,7 +12,6 @@ table 50204 "NAC.IBMNAV.IFBAT"
     {
 
         /// Key Fields from IBM
-        field(1;IBREC;Text[20]) { Description='BATCH REC'; }
         field(2;IBID;Integer) { Description='ID NO'; }
         field(3;IBTID;Code[10]) { Description='TRN IDENTIFIER'; }
         field(4;IBSEQ;Integer) { Description='TRN SEQUENCE'; }
@@ -20,14 +19,14 @@ table 50204 "NAC.IBMNAV.IFBAT"
 
 
         /// Dimensions
-        field(10;IBMDIM1;Code[20]) { Description='Shortcut Dimension 1'; }
-        field(11;IBMDIM2;Code[20]) { Description='Shortcut Dimension 2'; }
-        field(12;IBMDIM3;Code[20]) { Description='Shortcut Dimension 3'; }
-        field(13;IBMDIM4;Code[20]) { Description='Shortcut Dimension 4'; }
-        field(14;IBMDIM5;Code[20]) { Description='Shortcut Dimension 5'; }
-        field(15;IBMDIM6;Code[20]) { Description='Shortcut Dimension 6'; }
-        field(16;IBMDIM7;Code[20]) { Description='Shortcut Dimension 7'; }
-        field(17;IBMDIM8;Code[20]) { Description='Shortcut Dimension 8'; }
+        field(10;IBDIM1;Code[20]) { Description='Shortcut Dimension 1'; }
+        field(11;IBDIM2;Code[20]) { Description='Shortcut Dimension 2'; }
+        field(12;IBDIM3;Code[20]) { Description='Shortcut Dimension 3'; }
+        field(13;IBDIM4;Code[20]) { Description='Shortcut Dimension 4'; }
+        field(14;IBDIM5;Code[20]) { Description='Shortcut Dimension 5'; }
+        field(15;IBDIM6;Code[20]) { Description='Shortcut Dimension 6'; }
+        field(16;IBDIM7;Code[20]) { Description='Shortcut Dimension 7'; }
+        field(17;IBDIM8;Code[20]) { Description='Shortcut Dimension 8'; }
         
         /// Journal Fields
         field(30;IBDOCNO;Code[20]) { Description='TRN DOC NO'; }
