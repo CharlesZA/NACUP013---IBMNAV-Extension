@@ -1,6 +1,9 @@
 
 table 50203 "NAC.IBMNAV.IBMTransactionType"
 {
+    DataClassification=CustomerContent;
+    DataPerCompany=true;
+    Description='IBM Transaction that are supported for NAV posting';
 
     fields
     {

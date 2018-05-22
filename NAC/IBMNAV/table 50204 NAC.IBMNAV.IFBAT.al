@@ -1,12 +1,12 @@
 /// This table is the representation of the batch file from the IBM Server for NAV
-/// Field naming is kept the same as on the IBM server for clarity
+/// Field naming is kept similar as on the IBM server for clarity
 
 
-table 50204 "NAC.IBMNAV.IFBATCH"
+table 50204 "NAC.IBMNAV.IFBAT"
 {
     DataClassification = CustomerContent;
     DataPerCompany=true;
-    Description = 'This table represents the data batch file received from IBM after it has been imported'
+    Description = 'This table represents the data batch file received from IBM after it has been imported';
     
     fields
     {
