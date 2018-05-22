@@ -20,7 +20,6 @@ xmlport 50203 "NAC.IBMNAV.IFBATXMLP"
                 fieldelement(IBTID;IFBAT.IBTID) {}
                 fieldelement(IBSEQ;IFBAT.IBSEQ){}
                 fieldelement(IBTC;IFBAT.IBTC){}
-
                 fieldelement(IBDIM1;IFBAT.IBDIM1){}
                 fieldelement(IBDIM2;IFBAT.IBDIM2){}
                 fieldelement(IBDIM3;IFBAT.IBDIM3){}
@@ -29,7 +28,6 @@ xmlport 50203 "NAC.IBMNAV.IFBATXMLP"
                 fieldelement(IBDIM6;IFBAT.IBDIM6){}
                 fieldelement(IBDIM7;IFBAT.IBDIM7){}
                 fieldelement(IBDIM8;IFBAT.IBDIM8){}
-
                 fieldelement(IBDOCNO;IFBAT.IBDOCNO) {}
                 fieldelement(IBENV;IFBAT.IBENV){}
                 fieldelement(IBPOSTDAT;IFBAT.IBPOSTDAT){}
@@ -45,6 +43,7 @@ xmlport 50203 "NAC.IBMNAV.IFBATXMLP"
                 fieldelement(IBTUSER;IFBAT.IBTUSER){}
                 fieldelement(IBTDATE;IFBAT.IBTDATE){}
                 fieldelement(IBTTIME;IFBAT.IBTTIME){}
+                fieldelement(IBPDF;IFBAT.IBPDF){}
                 fieldelement(IBERR;IFBAT.IBERR){}
                 fieldelement(IBRESCD;IFBAT.IBRESCD){}
             }

@@ -19,19 +19,36 @@ codeunit 50202 "NAC.IBMNAV.Process"
         
     begin
         IBMNAVSetup.get;
-        IBMNAVSetup.TestField(IBMNAVSetup.DataBatchFileName);
+        IBMNAVSetup.TestField(IBMNAVSetup.DataDefinitionBatchFileName);
         IBMNAVSetup.TestField(DataStagingPath);
         IBMNAVSetup.TestField(DataDefinitionPath);
 
         //dataTransfer.DataTransfer_Download(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataBatchFileName);
 
-        if dataTransfer.DataTransfer_Download(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataBatchFileName) then
+        if dataTransfer.DataTransfer_Download(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataDefinitionBatchFileName) then
             Message('complete')
         else
             Message('something went amiss');
         
     end;
 
+    procedure ProcessUploadTest();
+    var
+        
+    begin
+        IBMNAVSetup.get;
+        IBMNAVSetup.TestField(IBMNAVSetup.DataDefinitionResponseFileName);
+        IBMNAVSetup.TestField(DataStagingPath);
+        IBMNAVSetup.TestField(DataDefinitionPath);
+
+        //dataTransfer.DataTransfer_Download(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataBatchFileName);
+
+        if dataTransfer.DataTransfer_Upload(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataDefinitionResponseFileName) then
+            Message('complete')
+        else
+            Message('something went amiss');
+        
+    end;
 
     local procedure ProcessDataTransferFromIBM();
     var
