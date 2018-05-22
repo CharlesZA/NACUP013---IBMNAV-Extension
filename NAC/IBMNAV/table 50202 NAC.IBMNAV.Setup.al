@@ -3,6 +3,7 @@
 table 50202 "NAC.IBMNAV.Setup"
 {
     DataPerCompany=true;
+    DataClassification=CustomerContent;
     Description = 'Contains Setup Information for Integration';
 
     fields

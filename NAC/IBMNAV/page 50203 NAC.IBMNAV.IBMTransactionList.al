@@ -3,8 +3,9 @@
 page 50203 "NAC.IBMNAV.IBMTransactionList"
 {
     PageType = List;
-    SourceTable = "NAC.IBMNAV.IBMTransaction";
+    SourceTable = "NAC.IBMNAV.IBMTransactionType";
     Editable = true;
+    UsageCategory=Administration;
 
     layout
     {

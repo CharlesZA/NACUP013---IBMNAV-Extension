@@ -18,7 +18,19 @@ codeunit 50202 "NAC.IBMNAV.Process"
     var
         
     begin
-        
+
+        /// Verify Setups
+
+        /// Download Data from IBM
+
+        /// Save Data for this request into a table. 
+
+        /// Go through transaction mini batches and post
+
+        /// Create response file. 
+
+        /// Send response back to IBM. 
+            
     end;
 
     local procedure ProcessDataTransferToIBM();

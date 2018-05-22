@@ -8,6 +8,7 @@ page 50202 "NAC.IBMNAV.SetupCard"
     InsertAllowed = false;
     ModifyAllowed = true;
     Caption='NAC.IBMNAV Integration Setup Card';
+    UsageCategory = Administration;
 
     layout
     {

@@ -25,7 +25,7 @@ codeunit 50299 "NAC.IBMNAV.Install"
     local procedure HandleFreshInstall();
     var
         IntegrationSetup:Record"NAC.IBMNAV.Setup";
-        IBMTransaction:Record"NAC.IBMNAV.IBMTransaction";
+        IBMTransaction:Record"NAC.IBMNAV.IBMTransactionType";
     begin
         // Do work needed the first time this extension is ever installed for this tenant.
         // Some possible usages:
