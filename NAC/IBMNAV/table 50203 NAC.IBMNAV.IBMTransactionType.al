@@ -26,40 +26,41 @@ table 50203 "NAC.IBMNAV.IBMTransactionType"
         }
     }
 
-    procedure SetupDefaults();
+    procedure SetupDefaults(companyName:Text[30]);
     var
     begin
         /// This procedure will setup all the default codes used for integrating transactions.
-        AddSetupDefault('POREC','Purchase Receipt',TRUE);
-        AddSetupDefault('POPI','Purchase Invoice',FALSE);
-        AddSetupDefault('ROSCRAP','Repair Order - Scrapping',FALSE);
-        AddSetupDefault('SOPI','Service Order',FALSE);
-        AddSetupDefault('LOPI','Exchange Order',FALSE);
-        AddSetupDefault('CORERET','Return to Supplier - Core Return',FALSE);
-        AddSetupDefault('SUPRET','Return to Supplier',FALSE);
-        AddSetupDefault('XFEROUT','Transfer - OUT',FALSE);
-        AddSetupDefault('XFERIN','Transfer - IN',FALSE);
-        AddSetupDefault('STKADJ','Stock Adjustment',FALSE);
-        AddSetupDefault('VALADJ','Stock Value Adjustment',FALSE);
-        AddSetupDefault('SCRAP','Stock Scrapping',FALSE);
-        AddSetupDefault('WRTOFF','Stock - Write Off',FALSE);
-        AddSetupDefault('ACRRF','Receipt from Aircraft Removal',FALSE);
-        AddSetupDefault('ISSGEN','Issue for Internal Needs',FALSE);
-        AddSetupDefault('ISSMRO','Issue to Line Maintenance / Work Pack',FALSE);
-        AddSetupDefault('DNU','Draw not Used',FALSE);
-        AddSetupDefault('LRSCRP','Local Repair - Scrap',FALSE);
-        AddSetupDefault('COEINV','Delivery Note - Sales',FALSE);
-        AddSetupDefault('COECRD','Delivery Note - Credit',FALSE);
-        AddSetupDefault('SUNINV','Sundry - Invoice',FALSE);
-        AddSetupDefault('SUNCRD','Sundry - Credit',FALSE);
-        AddSetupDefault('MROINV','MRO - Invoice',FALSE);
-        AddSetupDefault('MROCRD','MRO - Credit',FALSE);
+        AddSetupDefault('POREC','Purchase Receipt',TRUE,companyName);
+        AddSetupDefault('POPI','Purchase Invoice',FALSE,companyName);
+        AddSetupDefault('ROSCRAP','Repair Order - Scrapping',FALSE,companyName);
+        AddSetupDefault('SOPI','Service Order',FALSE,companyName);
+        AddSetupDefault('LOPI','Exchange Order',FALSE,companyName);
+        AddSetupDefault('CORERET','Return to Supplier - Core Return',FALSE,companyName);
+        AddSetupDefault('SUPRET','Return to Supplier',FALSE,companyName);
+        AddSetupDefault('XFEROUT','Transfer - OUT',FALSE,companyName);
+        AddSetupDefault('XFERIN','Transfer - IN',FALSE,companyName);
+        AddSetupDefault('STKADJ','Stock Adjustment',FALSE,companyName);
+        AddSetupDefault('VALADJ','Stock Value Adjustment',FALSE,companyName);
+        AddSetupDefault('SCRAP','Stock Scrapping',FALSE,companyName);
+        AddSetupDefault('WRTOFF','Stock - Write Off',FALSE,companyName);
+        AddSetupDefault('ACRRF','Receipt from Aircraft Removal',FALSE,companyName);
+        AddSetupDefault('ISSGEN','Issue for Internal Needs',FALSE,companyName);
+        AddSetupDefault('ISSMRO','Issue to Line Maintenance / Work Pack',FALSE,companyName);
+        AddSetupDefault('DNU','Draw not Used',FALSE,companyName);
+        AddSetupDefault('LRSCRP','Local Repair - Scrap',FALSE,companyName);
+        AddSetupDefault('COEINV','Delivery Note - Sales',FALSE,companyName);
+        AddSetupDefault('COECRD','Delivery Note - Credit',FALSE,companyName);
+        AddSetupDefault('SUNINV','Sundry - Invoice',FALSE,companyName);
+        AddSetupDefault('SUNCRD','Sundry - Credit',FALSE,companyName);
+        AddSetupDefault('MROINV','MRO - Invoice',FALSE,companyName);
+        AddSetupDefault('MROCRD','MRO - Credit',FALSE,companyName);
     end;
 
-    local procedure AddSetupDefault(defaultCode:Code[10];defaultDescription:Text[50];blocked:Boolean);
+    local procedure AddSetupDefault(defaultCode:Code[10];defaultDescription:Text[50];blocked:Boolean;companyName:Text[30]);
     var
         IBMTransactionCode : Record "NAC.IBMNAV.IBMTransactionType";   
     begin
+        if companyName <> '' then IBMTransactionCode.ChangeCompany(companyName);
         IBMTransactionCode.Init;
         IBMTransactionCode.Code := defaultCode;
         IBMTransactionCode.Description := defaultDescription;

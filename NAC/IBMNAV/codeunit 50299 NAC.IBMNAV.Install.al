@@ -26,18 +26,24 @@ codeunit 50299 "NAC.IBMNAV.Install"
     var
         IntegrationSetup:Record"NAC.IBMNAV.Setup";
         IBMTransaction:Record"NAC.IBMNAV.IBMTransactionType";
+        Company:Record"Company";
     begin
         // Do work needed the first time this extension is ever installed for this tenant.
         // Some possible usages:
         // - Service callback/telemetry indicating that extension was install
         // - Initial data setup for use
+        if Company.FindFirst() then begin
+            repeat
+                IntegrationSetup.ChangeCompany(Company.Name);
+                IBMTransaction.ChangeCompany(Company.Name);
 
-        IntegrationSetup.init;
-        IntegrationSetup.SetupDefaults();
-        IntegrationSetup.Insert(false);
+                IntegrationSetup.init;
+                IntegrationSetup.SetupDefaults();
+                IntegrationSetup.Insert(false);
 
-        IBMTransaction.SetupDefaults();
-        
+                IBMTransaction.SetupDefaults(Company.Name);
+            until Company.Next = 0;
+        end;
     end;
 
     local procedure HandleReinstall();

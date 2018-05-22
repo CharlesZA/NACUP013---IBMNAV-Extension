@@ -6,6 +6,7 @@ page 50204 "NAC.IBMNAV.IFBATList"
     PageType = List;
     SourceTable = "NAC.IBMNAV.IFBAT";
     UsageCategory = Lists;
+    Caption='NAC.IBMNAV IBM Batch Information';
 
     layout
     {

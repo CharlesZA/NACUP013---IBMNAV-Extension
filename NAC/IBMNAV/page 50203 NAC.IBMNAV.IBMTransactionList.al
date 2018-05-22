@@ -6,6 +6,7 @@ page 50203 "NAC.IBMNAV.IBMTransactionList"
     SourceTable = "NAC.IBMNAV.IBMTransactionType";
     Editable = true;
     UsageCategory=Administration;
+    Caption = 'NAC.IBMNAV IBM Transactions';
 
     layout
     {
@@ -41,7 +42,7 @@ page 50203 "NAC.IBMNAV.IBMTransactionList"
                 Caption = 'Setup Defaults';
                 trigger OnAction();
                 begin
-                    Rec.SetupDefaults();
+                    Rec.SetupDefaults(CompanyName);
                     CurrPage.Activate(true);
                 end;
             }

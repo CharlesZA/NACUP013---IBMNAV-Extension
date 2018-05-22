@@ -5,7 +5,7 @@ page 50205 "NAC.IBMNAV.IFRETList"
     PageType = List;
     SourceTable = "NAC.IBMNAV.IFRET";
     UsageCategory = Lists;
-
+    Caption = 'NAC.IBMNAV IBM Return File Information';
     layout
     {
         area(content)
