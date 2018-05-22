@@ -39,11 +39,23 @@ page 50202 "NAC.IBMNAV.SetupCard"
             action(SetupDefaults)
             {
                 Caption = 'Setup Defaults';
+                Image=Setup;
                 trigger OnAction();
                 begin
                     Rec.SetupDefaults();
                     rec.Modify(FALSE);
                     CurrPage.Activate(true);
+                end;
+            }
+            action(ProcessDownloadTest)
+            {
+                Caption='Process Download Test';
+                Image=TestFile;
+                trigger OnAction();
+                var
+                    IBMProcess:Codeunit"NAC.IBMNAV.Process";
+                begin
+                    IBMProcess.ProcessDownloadTest();
                 end;
             }
         }

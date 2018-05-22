@@ -6,10 +6,29 @@ codeunit 50202 "NAC.IBMNAV.Process"
 
     var
         dataTransfer :Codeunit "NAC.IBMNAV.ACL";
+        IBMNAVSetup:Record"NAC.IBMNAV.Setup";
         
 
     trigger OnRun();
     begin
+        
+    end;
+
+    procedure ProcessDownloadTest();
+    var
+        
+    begin
+        IBMNAVSetup.get;
+        IBMNAVSetup.TestField(IBMNAVSetup.DataBatchFileName);
+        IBMNAVSetup.TestField(DataStagingPath);
+        IBMNAVSetup.TestField(DataDefinitionPath);
+
+        //dataTransfer.DataTransfer_Download(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataBatchFileName);
+
+        if dataTransfer.DataTransfer_Download(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataBatchFileName) then
+            Message('complete')
+        else
+            Message('something went amiss');
         
     end;
 
