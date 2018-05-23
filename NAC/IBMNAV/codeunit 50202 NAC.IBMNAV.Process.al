@@ -14,6 +14,63 @@ codeunit 50202 "NAC.IBMNAV.Process"
         
     end;
 
+    /// This is just a test function and can be removed later
+    procedure ProcessExportIFRETTest();
+    var
+        IFRETExport:XmlPort"NAC.IBMNAV.IFRETXMLP";
+        txtOutStream:OutStream;
+        blobHelper:Record"NAC.IBMNAV.ProcessBlob";
+    begin
+        IBMNAVSetup.get;
+        IBMNAVSetup.TestField(DataStagingPath);
+        IBMNAVSetup.TestField(DataStagingResponseFileName);
+
+        if blobHelper.get() = false then begin
+            blobHelper.init;
+            blobHelper.Insert(false);
+        end;
+
+        blobHelper.CalcFields(TempBlob);
+        blobHelper.TempBlob.CreateOutStream(txtOutStream);
+        IFRETExport.SetDestination(txtOutStream);
+        IFRETExport.Export();
+        blobHelper.Modify(FALSE);
+        blobHelper.ExportToServerFile(IBMNAVSetup.DataStagingPath + '\' + IBMNAVSetup.DataStagingResponseFileName,true);
+
+        blobHelper.get();
+        blobHelper.Delete(false);
+    end;
+
+
+    /// This is just a test function and can be removed later
+    procedure ProcessImportIFBATTest();
+    var
+        IFBATImport:XmlPort"NAC.IBMNAV.IFBATXMLP";
+        txtInStream:InStream;
+        blobHelper:Record"NAC.IBMNAV.ProcessBlob";
+    begin
+        IBMNAVSetup.Get;
+        IBMNAVSetup.TestField(DataStagingPath);
+        IBMNAVSetup.TestField(DataStagingBatchFileName);
+
+        if blobHelper.get() = false then begin
+            blobHelper.Init;
+            blobHelper.Insert(false);
+        end;
+        
+        blobHelper.ImportFromServerFile(IBMNAVSetup.DataStagingPath + '\' + IBMNAVSetup.DataStagingBatchFileName);
+        blobHelper.get();
+        blobHelper.CalcFields(TempBlob);
+        blobHelper.TempBlob.CreateInStream(txtInStream);
+
+        IFBATImport.SetSource(txtInStream);
+        IFBATImport.Import();
+
+        blobHelper.Delete(FALSE);
+        
+        Message('complete');
+    end;
+
     procedure ProcessDownloadTest();
     var
         

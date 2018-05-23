@@ -5,8 +5,8 @@ xmlport 50202 "NAC.IBMNAV.IFRETXMLP"
 {
     Direction = Export;
     Format = VariableText;
-    FieldDelimiter = '<TAB>';
-    FieldSeparator = '<None>';
+    FieldDelimiter = '<None>';
+    FieldSeparator = '<TAB>';
     RecordSeparator = '<NewLine>';
     TableSeparator = '<NewLine><NewLine>';
     Description='This xmlport is used to export information for IBM.';

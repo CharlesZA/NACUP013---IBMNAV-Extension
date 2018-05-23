@@ -1,14 +1,15 @@
 /// This xmlport is used to import information sent from IBM into nav
 
-xmlport 50203 "NAC.MNAV.IFBATXMLP"
+xmlport 50203 "NAC.IBMNAV.IFBATXMLP"
 {
     Direction = Import;
     Format = VariableText;
-    FieldDelimiter = '<TAB>';
-    FieldSeparator = '<None>';
+    FieldDelimiter = '<None>';
+    FieldSeparator = '<TAB>';
     RecordSeparator = '<NewLine>';
     TableSeparator = '<NewLine><NewLine>';
     Description='This xmlport is used to import information sent from IBM into nav';
+    UseRequestPage=false;
 
     schema
     {

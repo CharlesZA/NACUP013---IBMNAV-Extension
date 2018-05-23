@@ -57,6 +57,16 @@ page 50202 "NAC.IBMNAV.SetupCard"
                     IBMProcess.ProcessDownloadTest();
                 end;
             }
+            action(ProcessImportIFBAT)
+            {
+                Caption='Test importing batch file';
+                trigger OnAction();
+                var
+                    IBMProcess:Codeunit"NAC.IBMNAV.Process";
+                begin
+                    IBMProcess.ProcessImportIFBATTest();
+                end;
+            }
             action(ProcessUploadTest)
             {
                 Caption='Process Upload Test';
