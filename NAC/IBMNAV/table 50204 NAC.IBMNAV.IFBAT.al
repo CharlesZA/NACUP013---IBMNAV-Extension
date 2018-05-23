@@ -33,6 +33,7 @@ table 50204 "NAC.IBMNAV.IFBAT"
         field(31;ENV;Code[5]) { Description='MRO ENV'; }
         field(32;POSTDAT;Date) { Description='POSTED DATE'; }
         field(33;DOCDAT;Date) { Description='DOCUMENT DATE'; }
+        field(34;DOCTYP;Code[20]) { Description='DOCUMENT TYPE'; }
 
         field(35;ACCTYP;Code[10]) { Description='ACCT TYPE'; } /// GL, CUSTOMER, VENDOR
         field(36;ACCTNO;Code[20]) { Description='ACCT NO'; }

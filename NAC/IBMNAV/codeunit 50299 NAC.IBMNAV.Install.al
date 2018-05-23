@@ -26,6 +26,8 @@ codeunit 50299 "NAC.IBMNAV.Install"
     var
         IntegrationSetup:Record"NAC.IBMNAV.Setup";
         IBMTransaction:Record"NAC.IBMNAV.IBMTransactionType";
+        SourceCode:Record"Source Code";
+        SourceCodeSetup:Record"Source Code Setup";
         Company:Record"Company";
     begin
         // Do work needed the first time this extension is ever installed for this tenant.
@@ -34,14 +36,26 @@ codeunit 50299 "NAC.IBMNAV.Install"
         // - Initial data setup for use
         if Company.FindFirst() then begin
             repeat
-                IntegrationSetup.ChangeCompany(Company.Name);
-                IBMTransaction.ChangeCompany(Company.Name);
 
+                IntegrationSetup.ChangeCompany(Company.Name);              
                 IntegrationSetup.init;
                 IntegrationSetup.SetupDefaults();
                 IntegrationSetup.Insert(false);
 
+                IBMTransaction.ChangeCompany(Company.Name);
                 IBMTransaction.SetupDefaults(Company.Name);
+
+                SourceCode.ChangeCompany(Company.Name);
+                SourceCode.Init;
+                SourceCode.Code := 'NAC.IBMNAV';
+                SourceCode.Description := 'NAC.IBMNAV Transactions';
+                if SourceCode.Insert(false) then begin end;
+
+                SourceCodeSetup.ChangeCompany(Company.Name);
+                if SourceCodeSetup.get() then begin
+                    SourceCodeSetup."NAC.IBMNAV" := 'NAC.IBMNAV';
+                    SourceCodeSetup.Modify(false);
+                end;
             until Company.Next = 0;
         end;
     end;

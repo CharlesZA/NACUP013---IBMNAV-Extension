@@ -16,8 +16,8 @@ xmlport 50203 "NAC.MNAV.IFBATXMLP"
         {
             tableelement(IFBAT; "NAC.IBMNAV.IFBAT")
             {
-                fieldelement(ID;IFBAT.ID) {}
-                fieldelement(TID;IFBAT.TID) {}
+                fieldelement(ID;IFBAT.ID){}
+                fieldelement(TID;IFBAT.TID){}
                 fieldelement(SEQ;IFBAT.SEQ){}
                 fieldelement(TC;IFBAT.TC){}
                 fieldelement(DIM1;IFBAT.DIM1){}
@@ -32,6 +32,7 @@ xmlport 50203 "NAC.MNAV.IFBATXMLP"
                 fieldelement(ENV;IFBAT.ENV){}
                 fieldelement(POSTDAT;IFBAT.POSTDAT){}
                 fieldelement(DOCDAT;IFBAT.DOCDAT){}
+                fieldelement(DOCTYP;IFBAT.DOCTYP){}
                 fieldelement(ACCTYP;IFBAT.ACCTYP){}
                 fieldelement(ACCTNO;IFBAT.ACCTNO){}
                 fieldelement(TRND;IFBAT.TRND){}

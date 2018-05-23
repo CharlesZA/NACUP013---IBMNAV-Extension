@@ -32,6 +32,7 @@ page 50204 "NAC.IBMNAV.IFBATList"
                 field(ENV;ENV) {}
                 field(POSTDAT;POSTDAT) {}
                 field(DOCDAT;DOCDAT) {}
+                field(DOCTYP;DOCTYP) {}
                 field(ACCTYP;ACCTYP) {}
                 field(ACCTNO;ACCTNO) {}
                 field(TRND;TRND) {}
