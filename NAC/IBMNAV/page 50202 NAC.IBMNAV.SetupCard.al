@@ -67,6 +67,16 @@ page 50202 "NAC.IBMNAV.SetupCard"
                     IBMProcess.ProcessImportIFBATTest();
                 end;
             }
+            action(ProcessExportIFRET)
+            {
+                Caption='Test exporting return file';
+                trigger OnAction();
+                var
+                    IBMProcess:Codeunit"NAC.IBMNAV.Process";
+                begin
+                    IBMProcess.ProcessExportIFRETTest();
+                end;
+            }
             action(ProcessUploadTest)
             {
                 Caption='Process Upload Test';

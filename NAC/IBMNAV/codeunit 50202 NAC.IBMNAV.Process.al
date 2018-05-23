@@ -28,6 +28,11 @@ codeunit 50202 "NAC.IBMNAV.Process"
         if blobHelper.get() = false then begin
             blobHelper.init;
             blobHelper.Insert(false);
+        end
+        else begin
+            blobHelper.Delete(false);
+            blobHelper.Init;
+            blobHelper.Insert(false);
         end;
 
         blobHelper.CalcFields(TempBlob);
@@ -39,6 +44,8 @@ codeunit 50202 "NAC.IBMNAV.Process"
 
         blobHelper.get();
         blobHelper.Delete(false);
+
+        Message('complete');
     end;
 
 
@@ -56,6 +63,11 @@ codeunit 50202 "NAC.IBMNAV.Process"
         if blobHelper.get() = false then begin
             blobHelper.Init;
             blobHelper.Insert(false);
+        end
+        else begin
+            blobHelper.Delete(false);
+            blobHelper.init;
+            blobHelper.Insert(false);
         end;
         
         blobHelper.ImportFromServerFile(IBMNAVSetup.DataStagingPath + '\' + IBMNAVSetup.DataStagingBatchFileName);
@@ -67,6 +79,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
         IFBATImport.Import();
 
         blobHelper.Delete(FALSE);
+        
         
         Message('complete');
     end;
