@@ -1,6 +1,6 @@
 /// This xmlport is used to import information sent from IBM into nav
 
-xmlport 50203 "NAC.IBMNAV.IFBATXMLP"
+xmlport 50203 "NAC.MNAV.IFBATXMLP"
 {
     Direction = Import;
     Format = VariableText;
@@ -16,36 +16,36 @@ xmlport 50203 "NAC.IBMNAV.IFBATXMLP"
         {
             tableelement(IFBAT; "NAC.IBMNAV.IFBAT")
             {
-                fieldelement(IBID;IFBAT.IBID) {}
-                fieldelement(IBTID;IFBAT.IBTID) {}
-                fieldelement(IBSEQ;IFBAT.IBSEQ){}
-                fieldelement(IBTC;IFBAT.IBTC){}
-                fieldelement(IBDIM1;IFBAT.IBDIM1){}
-                fieldelement(IBDIM2;IFBAT.IBDIM2){}
-                fieldelement(IBDIM3;IFBAT.IBDIM3){}
-                fieldelement(IBDIM4;IFBAT.IBDIM4){}
-                fieldelement(IBDIM5;IFBAT.IBDIM5){}
-                fieldelement(IBDIM6;IFBAT.IBDIM6){}
-                fieldelement(IBDIM7;IFBAT.IBDIM7){}
-                fieldelement(IBDIM8;IFBAT.IBDIM8){}
-                fieldelement(IBDOCNO;IFBAT.IBDOCNO) {}
-                fieldelement(IBENV;IFBAT.IBENV){}
-                fieldelement(IBPOSTDAT;IFBAT.IBPOSTDAT){}
-                fieldelement(IBDOCDAT;IFBAT.IBDOCDAT){}
-                fieldelement(IBACCTYP;IFBAT.IBACCTYP){}
-                fieldelement(IBACCTNO;IFBAT.IBACCTNO){}
-                fieldelement(IBTRND;IFBAT.IBTRND){}
-                fieldelement(IBEXTDOC;IFBAT.IBEXTDOC){}
-                fieldelement(IBCURR;IFBAT.IBCURR){}
-                fieldelement(IBXRATE;IFBAT.IBXRATE){}
-                fieldelement(IBVALUE;IFBAT.IBVALUE){}
-                fieldelement(IBVATGRP;IFBAT.IBVATGRP){}
-                fieldelement(IBTUSER;IFBAT.IBTUSER){}
-                fieldelement(IBTDATE;IFBAT.IBTDATE){}
-                fieldelement(IBTTIME;IFBAT.IBTTIME){}
-                fieldelement(IBPDF;IFBAT.IBPDF){}
-                fieldelement(IBERR;IFBAT.IBERR){}
-                fieldelement(IBRESCD;IFBAT.IBRESCD){}
+                fieldelement(ID;IFBAT.ID) {}
+                fieldelement(TID;IFBAT.TID) {}
+                fieldelement(SEQ;IFBAT.SEQ){}
+                fieldelement(TC;IFBAT.TC){}
+                fieldelement(DIM1;IFBAT.DIM1){}
+                fieldelement(DIM2;IFBAT.DIM2){}
+                fieldelement(DIM3;IFBAT.DIM3){}
+                fieldelement(DIM4;IFBAT.DIM4){}
+                fieldelement(DIM5;IFBAT.DIM5){}
+                fieldelement(DIM6;IFBAT.DIM6){}
+                fieldelement(DIM7;IFBAT.DIM7){}
+                fieldelement(DIM8;IFBAT.DIM8){}
+                fieldelement(DOCNO;IFBAT.DOCNO) {}
+                fieldelement(ENV;IFBAT.ENV){}
+                fieldelement(POSTDAT;IFBAT.POSTDAT){}
+                fieldelement(DOCDAT;IFBAT.DOCDAT){}
+                fieldelement(ACCTYP;IFBAT.ACCTYP){}
+                fieldelement(ACCTNO;IFBAT.ACCTNO){}
+                fieldelement(TRND;IFBAT.TRND){}
+                fieldelement(EXTDOC;IFBAT.EXTDOC){}
+                fieldelement(CURR;IFBAT.CURR){}
+                fieldelement(XRATE;IFBAT.XRATE){}
+                fieldelement(VALUE;IFBAT.VALUE){}
+                fieldelement(VATGRP;IFBAT.VATGRP){}
+                fieldelement(TUSER;IFBAT.TUSER){}
+                fieldelement(TDATE;IFBAT.TDATE){}
+                fieldelement(TTIME;IFBAT.TTIME){}
+                fieldelement(PDF;IFBAT.PDF){}
+                fieldelement(ERR;IFBAT.ERR){}
+                fieldelement(RESCD;IFBAT.RESCD){}
             }
         }
     }

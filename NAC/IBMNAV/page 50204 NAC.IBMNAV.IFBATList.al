@@ -14,37 +14,37 @@ page 50204 "NAC.IBMNAV.IFBATList"
         {
             repeater(Group)
             {
-                field(IBID;IBID) {  }
-                field(IBTID;IBTID) {}
-                field(IBSEQ;IBSEQ) {}
-                field(IBTC;IBTC) {}
+                field(ID;ID) {  }
+                field(TID;TID) {}
+                field(SEQ;SEQ) {}
+                field(TC;TC) {}
 
-                field(IBDIM1;IBDIM1) {}
-                field(IBDIM2;IBDIM2) {}
-                field(IBDIM3;IBDIM3) {}
-                field(IBDIM4;IBDIM4) {}
-                field(IBDIM5;IBDIM5) {}
-                field(IBDIM6;IBDIM6) {}
-                field(IBDIM7;IBDIM7) {}
-                field(IBDIM8;IBDIM8) {}
+                field(DIM1;DIM1) {}
+                field(DIM2;DIM2) {}
+                field(DIM3;DIM3) {}
+                field(DIM4;DIM4) {}
+                field(DIM5;DIM5) {}
+                field(DIM6;DIM6) {}
+                field(DIM7;DIM7) {}
+                field(DIM8;DIM8) {}
 
-                field(IBDOCNO;IBDOCNO) {}
-                field(IBENV;IBENV) {}
-                field(IBPOSTDAT;IBPOSTDAT) {}
-                field(IBDOCDAT;IBDOCDAT) {}
-                field(IBACCTYP;IBACCTYP) {}
-                field(IBACCTNO;IBACCTNO) {}
-                field(IBTRND;IBTRND) {}
-                field(IBEXTDOC;IBEXTDOC) {}
-                field(IBCURR;IBCURR) {}
-                field(IBXRATE;IBXRATE) {}
-                field(IBVALUE;IBVALUE) {}
-                field(IBVATGRP;IBVATGRP) {}
-                field(IBTUSER;IBTUSER) {}
-                field(IBTDATE;IBTDATE) {}
-                field(IBTTIME;IBTTIME) {}
-                field(IBERR;IBERR) {}
-                field(IBRESCD;IBRESCD) {}
+                field(DOCNO;DOCNO) {}
+                field(ENV;ENV) {}
+                field(POSTDAT;POSTDAT) {}
+                field(DOCDAT;DOCDAT) {}
+                field(ACCTYP;ACCTYP) {}
+                field(ACCTNO;ACCTNO) {}
+                field(TRND;TRND) {}
+                field(EXTDOC;EXTDOC) {}
+                field(CURR;CURR) {}
+                field(XRATE;XRATE) {}
+                field(VALUE;VALUE) {}
+                field(VATGRP;VATGRP) {}
+                field(TUSER;TUSER) {}
+                field(TDATE;TDATE) {}
+                field(TTIME;TTIME) {}
+                field(ERR;ERR) {}
+                field(RESCD;RESCD) {}
             }
         }
     }

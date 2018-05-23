@@ -30,12 +30,13 @@ table 50203 "NAC.IBMNAV.IBMTransactionType"
     var
     begin
         /// This procedure will setup all the default codes used for integrating transactions.
+        /// These values were determined at the time of development
         AddSetupDefault('POREC','Purchase Receipt',TRUE,companyName);
         AddSetupDefault('POPI','Purchase Invoice',FALSE,companyName);
         AddSetupDefault('ROSCRAP','Repair Order - Scrapping',FALSE,companyName);
         AddSetupDefault('SOPI','Service Order',FALSE,companyName);
         AddSetupDefault('LOPI','Exchange Order',FALSE,companyName);
-        AddSetupDefault('CORERET','Return to Supplier - Core Return',FALSE,companyName);
+        AddSetupDefault('CORERET','Return to Supplier - Core Return',true,companyName);
         AddSetupDefault('SUPRET','Return to Supplier',FALSE,companyName);
         AddSetupDefault('XFEROUT','Transfer - OUT',FALSE,companyName);
         AddSetupDefault('XFERIN','Transfer - IN',FALSE,companyName);
@@ -54,6 +55,12 @@ table 50203 "NAC.IBMNAV.IBMTransactionType"
         AddSetupDefault('SUNCRD','Sundry - Credit',FALSE,companyName);
         AddSetupDefault('MROINV','MRO - Invoice',FALSE,companyName);
         AddSetupDefault('MROCRD','MRO - Credit',FALSE,companyName);
+        AddSetupDefault('LRRF','Stock Receipt from Local Repair',true,companyName);
+        AddSetupDefault('MROLAB','MRO Labour WIP',false,companyName);
+        AddSetupDefault('ORDBOT','Order: Bottom Charges',false,companyName);
+        AddSetupDefault('ORDFGT','Order: Freight charges',false,companyName);
+        AddSetupDefault('ORDINS','Order: Marine Insurance',false,companyName);
+        AddSetupDefault('ROPI','RO Invoice',false,companyName);
     end;
 
     local procedure AddSetupDefault(defaultCode:Code[10];defaultDescription:Text[50];blocked:Boolean;companyName:Text[30]);

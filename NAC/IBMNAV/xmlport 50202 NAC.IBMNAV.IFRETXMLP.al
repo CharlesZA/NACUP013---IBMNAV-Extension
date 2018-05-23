@@ -18,13 +18,13 @@ xmlport 50202 "NAC.IBMNAV.IFRETXMLP"
         {
             tableelement(IFRET; "NAC.IBMNAV.IFRET")
             {
-                fieldelement(IRID;IFRET.IRID) {}
-                fieldelement(IRTID;IFRET.IRTID) {}
-                fieldelement(IRSEQ;IFRET.IRSEQ) {}
-                fieldelement(IRRESCD;IFRET.IRRESCD) {}
-                fieldelement(IRRRESDS;IFRET.IRRESDS) {}
-                fieldelement(IRDATE;IFRET.IRDATE) {}
-                fieldelement(IRTIME;IFRET.IRTIME) {}
+                fieldelement(IRID;IFRET.ID) {}
+                fieldelement(IRTID;IFRET.TID) {}
+                fieldelement(IRSEQ;IFRET.SEQ) {}
+                fieldelement(IRRESCD;IFRET.RESCD) {}
+                fieldelement(IRRRESDS;IFRET.RESDS) {}
+                fieldelement(IRDATE;IFRET.DATE) {}
+                fieldelement(IRTIME;IFRET.TIME) {}
             }
         }
     }

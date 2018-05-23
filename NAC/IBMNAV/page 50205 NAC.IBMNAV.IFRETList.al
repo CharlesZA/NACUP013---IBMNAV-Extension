@@ -12,14 +12,14 @@ page 50205 "NAC.IBMNAV.IFRETList"
         {
             repeater(Group)
             {
-                field(IRID;IRID) {}
-                field(IRTID;IRTID) {}
-                field(IRSEQ;IRSEQ) {}
+                field(ID;ID) {}
+                field(TID;TID) {}
+                field(SEQ;SEQ) {}
                 
-                field(IRRESCD;IRRESCD) {}
-                field(IRRESDS;IRRESDS) {}
-                field(IRDATE;IRDATE) {}
-                field(IRTIME;IRTIME) {}
+                field(RESCD;RESCD) {}
+                field(RESDS;RESDS) {}
+                field(DATE;DATE) {}
+                field(TIME;TIME) {}
             }
         }
     }
