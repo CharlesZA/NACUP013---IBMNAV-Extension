@@ -67,11 +67,9 @@ table 50202 "NAC.IBMNAV.Setup"
         DataDefinitionBatchFileName := '<DATALIB_FILE>.dtfx';
         DataDefinitionResponseFileName := '<DATALIB_FILE>.dttx';
 
-
         DataStagingPath := 'E:\IBM DATA TRANSFER DATA';
         DataStagingBatchFileName := '<DATALIB_FILE>.txt';
         DataStagingResponseFileName := '<DATALIB_FILE>.txt';
-
     end;
 
     
