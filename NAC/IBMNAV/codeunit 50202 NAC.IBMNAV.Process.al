@@ -22,13 +22,17 @@ codeunit 50202 "NAC.IBMNAV.Process"
         DownloadDataFromIBM();
         ImportDownloadedDataIntoNAV();
 
-        /// COMMIT POINT :: Batches are commited as processed
-
-
-        /// Go through transaction mini batches and post
-
 
         /// COMMIT POINT :: Batches are commited as processed
+        Commit();
+
+
+        Codeunit.Run(Codeunit::"NAC.IBMNAV.Posting");
+
+
+        /// COMMIT POINT :: Batches are commited as processed
+        Commit();
+
 
         ExportUploadDataForIBM();
         UploadDataToIBM();
