@@ -10,7 +10,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
     var
         IFRET:Record"NAC.IBMNAV.IFRET";
         IFBAT:Record"NAC.IBMNAV.IFBAT";
-        genJnlLine:Record"Gen. Journal Line";
+        transactionType:Record"NAC.IBMNAV.TransactionType";
         dialogWindow:Dialog;
 
 
@@ -21,16 +21,114 @@ codeunit 50203 "NAC.IBMNAV.Posting"
 
     local procedure Code()
     var
+        firstLine:Boolean;
+        transactionId:Integer;
+        tempIFBAT:Record"NAC.IBMNAV.IFBAT"temporary;
+        tempIFRET:Record"NAC.IBMNAV.IFRET"temporary;
+        subString:Text;
     begin
         OpenDialog();
 
+        subString := 'Processing %1 %2 %3';
+        firstLine := true;
 
-        /// Loop through all the batch records
-        /// Process, Post and Commit for each batch
-        /// Write return information back on success or failure
+        if IFBAT.FindFirst() then begin
+            repeat
 
+                if firstLine then begin
+                    firstLine := false;
+                    transactionId := IFBAT.ID;
+                end;
+
+                UpdateDialog(strsubstno(subString,IFBAT.ID,IFBAT.TID,IFBAT.SEQ));
+
+                if transactionId <> IFBAT.ID then begin
+                    PostBatchInformation(tempIFBAT,tempIFRET);
+                    tempIFBAT.DeleteAll(false);
+                    tempIFRET.DeleteAll(false);
+                end
+                else begin
+                    tempIFBAT.Init();
+                    tempIFBAT.TransferFields(IFBAT);
+                    tempIFBAT.insert(FALSE);
+
+                    tempIFRET.Init();
+                    tempIFret.ID := tempIFBAT.ID;
+                    tempIFRET.TID := tempIFBAT.TID;
+                    tempIFRET.SEQ := tempIFBAT.SEQ;
+                    tempIFRET.RESDS := 'NOT PROCESSED';
+                    tempIFRET.Insert(FALSE);
+                end;
+            Until IFBAT.next = 0;
+
+            PostBatchInformation(tempIFBAT,tempIFRET);    /// Last Batch
+            tempIFBAT.DeleteAll(false);
+            tempIFRET.DeleteAll(false);
+        end;
 
         CloseDialog();
+    end;
+
+    local procedure PostBatchInformation(var tempIFBAT:Record"NAC.IBMNAV.IFBAT"temporary; tempIFRET:Record"NAC.IBMNAV.IFRET"temporary)
+    var
+        dataChecksPassed:Boolean; 
+        dataCheckFailDescription:Text[128]; 
+    begin
+        /// Save Temp History records to the transaction entry table.
+        /// Clear Temp records.
+        /// Pass or Fail write temp records to IFRET
+        tempIFBAT.FindSet();
+        repeat
+            tempIFRET.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ);
+
+            /// Checking Data for Errors
+            dataChecksPassed := true;
+            if transactionType.get(IFBAT.TID) then begin
+                if transactionType.Blocked then begin
+                    /// This is a fail
+                    dataCheckFailDescription := 'TRANSACTION TYPE IS BLOCKED IN NAV';
+                    dataChecksPassed := false;
+                end;
+            end
+            else begin
+                /// This is a fail
+                dataCheckFailDescription := 'TRANSACTION TYPE IS NOT SETUP IN NAV';
+                dataChecksPassed := false;
+            end;
+
+            /// Write to general journal line here.....
+            
+
+            if dataChecksPassed then begin
+                tempIFRET.RESCD := 'SUCCESS';
+                tempIFRET.RESDS := '';
+                tempIFRET.DATE := Today();
+                tempIFRET.TIME := Time();
+                tempIFRET.Modify(false);
+            end;
+        until (tempIFBAT.next = 0) OR (dataChecksPassed = false);
+
+        if dataChecksPassed = false then begin 
+            tempIFRET.RESDS := dataCheckFailDescription;
+            tempIFRET.Modify(false);
+            tempIFRET.ModifyAll(RESCD,'FAIL',false);
+            tempIFRET.ModifyAll(DATE,today(),false);
+            tempIFRET.ModifyAll(TIME,Time(),false);
+        end;
+
+        WriteFinalResponseInformation(tempIFRET);
+    end;
+
+    local procedure WriteFinalResponseInformation(var tempIFRET:Record"NAC.IBMNAV.IFRET"temporary)
+    begin
+        if tempIFRET.IsEmpty() = false then begin
+            tempIFRET.FindSet();
+            repeat
+                IFRET.init;
+                IFRET.TransferFields(tempIFRET);
+                IFRET.Insert();
+            until tempIFRET.next = 0;
+        end;
     end;
 
     /// Dialog for manual processing
