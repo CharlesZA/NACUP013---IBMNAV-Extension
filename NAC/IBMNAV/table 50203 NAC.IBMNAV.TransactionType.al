@@ -1,9 +1,9 @@
 
-table 50203 "NAC.IBMNAV.IBMTransactionType"
+table 50203 "NAC.IBMNAV.TransactionType"
 {
     //DataClassification=CustomerContent;
     DataPerCompany=true;
-    Description='IBM Transaction that are supported for NAV posting';
+    Description='IBM Transaction Types that are supported for NAV posting';
 
     fields
     {
@@ -65,7 +65,7 @@ table 50203 "NAC.IBMNAV.IBMTransactionType"
 
     local procedure AddSetupDefault(defaultCode:Code[10];defaultDescription:Text[50];blocked:Boolean;companyName:Text[30]);
     var
-        IBMTransactionCode : Record "NAC.IBMNAV.IBMTransactionType";   
+        IBMTransactionCode : Record "NAC.IBMNAV.TransactionType";   
     begin
         if companyName <> '' then IBMTransactionCode.ChangeCompany(companyName);
         IBMTransactionCode.Init;

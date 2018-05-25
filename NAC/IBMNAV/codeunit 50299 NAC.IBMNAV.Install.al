@@ -25,7 +25,7 @@ codeunit 50299 "NAC.IBMNAV.Install"
     local procedure HandleFreshInstall();
     var
         IntegrationSetup:Record"NAC.IBMNAV.Setup";
-        IBMTransaction:Record"NAC.IBMNAV.IBMTransactionType";
+        TransactionType:Record"NAC.IBMNAV.TransactionType";
         SourceCode:Record"Source Code";
         SourceCodeSetup:Record"Source Code Setup";
         Company:Record"Company";
@@ -42,8 +42,8 @@ codeunit 50299 "NAC.IBMNAV.Install"
                 IntegrationSetup.SetupDefaults();
                 IntegrationSetup.Insert(false);
 
-                IBMTransaction.ChangeCompany(Company.Name);
-                IBMTransaction.SetupDefaults(Company.Name);
+                TransactionType.ChangeCompany(Company.Name);
+                TransactionType.SetupDefaults(Company.Name);
 
                 SourceCode.ChangeCompany(Company.Name);
                 SourceCode.Init;

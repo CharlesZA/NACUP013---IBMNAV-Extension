@@ -1,12 +1,12 @@
 
 
-page 50203 "NAC.IBMNAV.IBMTransactionList"
+page 50203 "NAC.IBMNAV.TransactionTypes"
 {
     PageType = List;
-    SourceTable = "NAC.IBMNAV.IBMTransactionType";
+    SourceTable = "NAC.IBMNAV.TransactionType";
     Editable = true;
     UsageCategory=Administration;
-    Caption = 'NAC.IBMNAV IBM Transactions';
+    Caption = 'NAC.IBMNAV Transaction Types';
 
     layout
     {

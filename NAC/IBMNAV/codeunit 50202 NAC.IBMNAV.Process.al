@@ -24,6 +24,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
         VerifyIBMNAVSetup();
         CleanUpStagingFiles();
         DownloadDataFromIBM();
+        PrepareNAVSendAndRecieveTables();
         ImportDownloadedDataIntoNAV();
 
 
@@ -41,9 +42,19 @@ codeunit 50202 "NAC.IBMNAV.Process"
         ExportUploadDataForIBM();
         UploadDataToIBM();
         CleanUpStagingFiles();
-        
+
         CloseDialog();
     end;
+
+    local procedure PrepareNAVSendAndRecieveTables()
+    var
+        IFRET:Record"NAC.IBMNAV.IFRET";
+        IFBAT:Record"NAC.IBMNAV.IFBAT";
+    begin
+        IFBAT.DeleteAll(false);
+        IFRET.DeleteAll(false);
+    end;
+
 
     /// Dialog for manual processing
     local procedure OpenDialog()
