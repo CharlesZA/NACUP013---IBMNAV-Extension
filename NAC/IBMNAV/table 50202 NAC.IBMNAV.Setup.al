@@ -17,15 +17,14 @@ table 50202 "NAC.IBMNAV.Setup"
         }
         field(11;DataDefinitionBatchFileName;Text[250])
         {
-            Caption='Data Batch File Name';
+            Caption='Data Definition Batch File Name';
             Description='This is typically a file with a dtfx extension.';
         }
         field(12;DataDefinitionResponseFileName;Text[250])
         {
-            Caption='Data Response File Name';
+            Caption='Data Definition Response File Name';
             Description='These is typically a file with a dttx extension.';
         }
-
 
         field(20;DataStagingPath;Text[250])
         {

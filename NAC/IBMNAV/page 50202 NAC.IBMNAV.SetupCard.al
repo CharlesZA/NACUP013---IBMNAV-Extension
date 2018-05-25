@@ -82,9 +82,21 @@ page 50202 "NAC.IBMNAV.SetupCard"
                 Caption='Process Upload Test';
                 Image=TestFile;
                 trigger OnAction();
-                var IBMProcess:Codeunit"NAC.IBMNAV.Process";
+                var 
+                    IBMProcess:Codeunit"NAC.IBMNAV.Process";
                 begin
                     IBMProcess.ProcessUploadTest();
+                end;
+            }
+            action(ProcessManualTest)
+            {
+                Caption='Process Manual Integration Test';
+                Image=Post;
+                trigger OnAction();
+                var
+                    IBMProcess:Codeunit"NAC.IBMNAV.Process";
+                begin
+                    IBMProcess.Code();
                 end;
             }
         }
