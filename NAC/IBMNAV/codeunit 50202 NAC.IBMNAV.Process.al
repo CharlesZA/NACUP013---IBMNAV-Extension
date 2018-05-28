@@ -19,8 +19,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
     procedure Code()
     begin
         OpenDialog();
-
-        IBMNAVSetup.get;
+        
         VerifyIBMNAVSetup();
         CleanUpStagingFiles();
         DownloadDataFromIBM();
@@ -162,6 +161,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
     local procedure VerifyIBMNAVSetup()
     begin
         UpdateDialog('Verifying Setup Information');
+        IBMNAVSetup.GET;
         /// Data Definitions
         /// *ToDo: Add a check to see if these file actually exist on the server.
         IBMNAVSetup.TestField(DataDefinitionPath);

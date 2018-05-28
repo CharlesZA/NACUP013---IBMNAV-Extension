@@ -46,6 +46,18 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                     PostBatchInformation(tempIFBAT,tempIFRET);
                     tempIFBAT.DeleteAll(false);
                     tempIFRET.DeleteAll(false);
+
+                    tempIFBAT.Init();
+                    tempIFBAT.TransferFields(IFBAT);
+                    tempIFBAT.insert(FALSE);
+
+                    tempIFRET.Init();
+                    tempIFRET.ID := tempIFBAT.ID;
+                    tempIFRET.TID := tempIFBAT.TID;
+                    tempIFRET.SEQ := tempIFBAT.SEQ;
+                    tempIFRET.RESDS := 'NOT PROCESSED';
+                    tempIFRET.Insert(FALSE);
+
                 end
                 else begin
                     tempIFBAT.Init();
@@ -53,7 +65,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                     tempIFBAT.insert(FALSE);
 
                     tempIFRET.Init();
-                    tempIFret.ID := tempIFBAT.ID;
+                    tempIFRET.ID := tempIFBAT.ID;
                     tempIFRET.TID := tempIFBAT.TID;
                     tempIFRET.SEQ := tempIFBAT.SEQ;
                     tempIFRET.RESDS := 'NOT PROCESSED';
@@ -69,7 +81,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         CloseDialog();
     end;
 
-    local procedure PostBatchInformation(var tempIFBAT:Record"NAC.IBMNAV.IFBAT"temporary; tempIFRET:Record"NAC.IBMNAV.IFRET"temporary)
+    local procedure PostBatchInformation(var tempIFBAT:Record"NAC.IBMNAV.IFBAT"temporary; var tempIFRET:Record"NAC.IBMNAV.IFRET"temporary)
     var
         dataChecksPassed:Boolean; 
         dataCheckFailDescription:Text[128]; 
@@ -114,6 +126,12 @@ codeunit 50203 "NAC.IBMNAV.Posting"
             tempIFRET.ModifyAll(RESCD,'FAIL',false);
             tempIFRET.ModifyAll(DATE,today(),false);
             tempIFRET.ModifyAll(TIME,Time(),false);
+        end;
+
+        if dataChecksPassed then begin
+
+            /// Post the batch code here
+            
         end;
 
         WriteFinalResponseInformation(tempIFRET);
