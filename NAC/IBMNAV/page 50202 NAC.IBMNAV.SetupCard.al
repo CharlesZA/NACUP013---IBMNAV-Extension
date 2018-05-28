@@ -27,7 +27,13 @@ page 50202 "NAC.IBMNAV.SetupCard"
                 field("Data Staging Path";DataStagingPath){}
                 field("Data Staging Batch FileName";DataStagingBatchFileName){}
                 field("Data Staging Response FileName";DataStagingResponseFileName){}
-            }                
+            }   
+            group(Posting)
+            {
+                Caption='Posting';
+                field("General Journal Template";GenJnlTemplate){}
+                field("General Journal Batch Code";GenJnlBatchCode){}
+            }             
 
         }
     }

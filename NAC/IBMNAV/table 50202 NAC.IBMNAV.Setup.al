@@ -41,6 +41,16 @@ table 50202 "NAC.IBMNAV.Setup"
             Caption='Data Staging Response File Name';
             Description='File name of the file to send to the IBM Server';
         }
+        field(30;GenJnlTemplate;code[10])
+        {
+            Caption='General Journal Template';
+            Description='Specify the Templated Code used for Posting';
+        }
+        field(31;GenJnlBatchCode;code[10])
+        {
+            Caption='General Journal Batch Code';
+            Description='General journal batch code used for Posting';
+        }
 
         // field(100;ImportMode;Option)
         // {

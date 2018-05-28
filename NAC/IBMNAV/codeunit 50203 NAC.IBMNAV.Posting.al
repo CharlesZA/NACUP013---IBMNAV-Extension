@@ -11,6 +11,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         IFRET:Record"NAC.IBMNAV.IFRET";
         IFBAT:Record"NAC.IBMNAV.IFBAT";
         transactionType:Record"NAC.IBMNAV.TransactionType";
+        transactionEntry:Record"NAC.IBMNAV.TransactionEntry";
         dialogWindow:Dialog;
 
 
@@ -108,7 +109,22 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                 dataChecksPassed := false;
             end;
 
+            /// check if transaction has already been posted. 
+            IF dataChecksPassed then begin
+                if transactionEntry.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ) then begin
+                    dataChecksPassed := false;
+                    dataCheckFailDescription := 'TRANSACTION HAS ALREADY BEEN POSTED';
+                end;
+            end;
+
             /// Write to general journal line here.....
+            if dataChecksPassed then begin
+                if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
+                    dataChecksPassed := false;
+                    dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
+                    ClearLastError();
+                end;
+            end;
             
 
             if dataChecksPassed then begin
@@ -131,7 +147,9 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         if dataChecksPassed then begin
 
             /// Post the batch code here
-            
+
+            /// If this is successful write batch information to the history table.
+
         end;
 
         WriteFinalResponseInformation(tempIFRET);

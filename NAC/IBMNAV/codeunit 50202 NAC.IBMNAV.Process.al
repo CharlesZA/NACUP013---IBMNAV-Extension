@@ -40,7 +40,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
 
         ExportUploadDataForIBM();
         UploadDataToIBM();
-        CleanUpStagingFiles();
+        //CleanUpStagingFiles();
 
         CloseDialog();
     end;
@@ -171,6 +171,9 @@ codeunit 50202 "NAC.IBMNAV.Process"
         IBMNAVSetup.TestField(DataStagingPath);
         IBMNAVSetup.TestField(DataStagingResponseFileName);
         IBMNAVSetup.TestField(DataStagingBatchFileName);
+        /// Posting
+        IBMNAVSetup.TestField(GenJnlTemplate);
+        IBMNAVSetup.TestField(GenJnlBatchCode);
     end;
 
     /// This is just a test function and can be removed later
