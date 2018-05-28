@@ -8,6 +8,7 @@
 codeunit 50203 "NAC.IBMNAV.Posting"
 {
     var
+        IBMSetup:Record"NAC.IBMNAV.Setup";
         IFRET:Record"NAC.IBMNAV.IFRET";
         IFBAT:Record"NAC.IBMNAV.IFBAT";
         transactionType:Record"NAC.IBMNAV.TransactionType";
@@ -86,6 +87,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
     var
         dataChecksPassed:Boolean; 
         dataCheckFailDescription:Text[128]; 
+        genJnlLine:Record"Gen. Journal Line";
     begin
         /// Save Temp History records to the transaction entry table.
         /// Clear Temp records.
@@ -136,23 +138,51 @@ codeunit 50203 "NAC.IBMNAV.Posting"
             end;
         until (tempIFBAT.next = 0) OR (dataChecksPassed = false);
 
+
+        if dataChecksPassed then begin
+
+            /// Post the batch code here
+            IBMSetup.get;
+            genJnlLine.SetRange("Journal Template Name",IBMSetup.GenJnlTemplate);
+            genJnlLine.SetRange("Journal Batch Name",IBMSetup.GenJnlBatchCode);
+            if genJnlLine.IsEmpty() = false then begin
+                    genJnlLine.FindSet();
+                    IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch",genJnlLine) then begin
+                        WriteTransactionHistoryInformation(tempIFBAT);
+                    end
+                    else begin
+                        dataChecksPassed := false;
+                        dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
+                        ClearLastError();
+                    end;
+            end
+            else begin
+                dataChecksPassed := false;
+                dataCheckFailDescription := 'POST FAILED: NO JOURNALS CREATED';
+            end;
+        end;
+
         if dataChecksPassed = false then begin 
             tempIFRET.RESDS := dataCheckFailDescription;
             tempIFRET.Modify(false);
             tempIFRET.ModifyAll(RESCD,'FAIL',false);
             tempIFRET.ModifyAll(DATE,today(),false);
             tempIFRET.ModifyAll(TIME,Time(),false);
-        end;
-
-        if dataChecksPassed then begin
-
-            /// Post the batch code here
-
-            /// If this is successful write batch information to the history table.
-
-        end;
+        end;       
 
         WriteFinalResponseInformation(tempIFRET);
+    end;
+
+    local procedure WriteTransactionHistoryInformation(var tempIFBAT:Record"NAC.IBMNAV.IFBAT"temporary)
+    begin
+        if tempIFBAT.IsEmpty() = false then begin
+            tempIFBAT.FindSet();
+            repeat
+                transactionEntry.Init();
+                transactionEntry.TransferFields(tempIFBAT);
+                transactionEntry.Insert();
+            until tempIFBAT.Next = 0;
+        end;
     end;
 
     local procedure WriteFinalResponseInformation(var tempIFRET:Record"NAC.IBMNAV.IFRET"temporary)
