@@ -1,3 +1,5 @@
+/// This codeunit is designed to be setup on the Job Queue system. 
+
 
 codeunit 50202 "NAC.IBMNAV.Process"
 {
