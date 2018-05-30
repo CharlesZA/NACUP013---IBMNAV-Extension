@@ -29,6 +29,7 @@ codeunit 50299 "NAC.IBMNAV.Install"
         SourceCode:Record"Source Code";
         SourceCodeSetup:Record"Source Code Setup";
         Company:Record"Company";
+        GenJnlBatch:Record"Gen. Journal Batch";
     begin
         // Do work needed the first time this extension is ever installed for this tenant.
         // Some possible usages:
@@ -55,6 +56,15 @@ codeunit 50299 "NAC.IBMNAV.Install"
                 if SourceCodeSetup.get() then begin
                     SourceCodeSetup."NAC.IBMNAV" := 'NAC.IBMNAV';
                     SourceCodeSetup.Modify(false);
+                end;
+
+                GenJnlBatch.ChangeCompany(Company.Name);
+                if GenJnlBatch.Get('GENERAL','IBMNAV') = false then begin
+                    GenJnlBatch.init;
+                    GenJnlBatch."Journal Template Name" := 'GENERAL';
+                    GenJnlBatch.Name := 'IBMNAV';
+                    GenJnlBatch.Description := 'NAC.IBMNAV Transactions';
+                    GenJnlBatch.Insert(FALSE);
                 end;
             until Company.Next = 0;
         end;

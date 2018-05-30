@@ -6,7 +6,8 @@
             "request": "launch",
             "name": "Your own server",
             "server": "http://localhost",
-            "serverInstance": "DynamicsNAV110",
+            "port": 7069,
+            "serverInstance": "NAVTEST",
             "authentication": "Windows",
             "startupObjectId": 50202,
             "schemaUpdateMode": "Synchronize"         
