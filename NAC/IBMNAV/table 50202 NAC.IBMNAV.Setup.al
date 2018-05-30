@@ -79,6 +79,9 @@ table 50202 "NAC.IBMNAV.Setup"
         DataStagingPath := 'E:\IBM DATA TRANSFER DATA';
         DataStagingBatchFileName := '<DATALIB_FILE>.txt';
         DataStagingResponseFileName := '<DATALIB_FILE>.txt';
+
+        GenJnlTemplate := 'GENERAL';
+        GenJnlBatchCode := 'IBMNAV';
     end;
 
     

@@ -119,14 +119,14 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                 end;
             end;
 
-            /// Write to general journal line here.....
-            if dataChecksPassed then begin
-                if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
-                    dataChecksPassed := false;
-                    dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
-                    ClearLastError();
-                end;
-            end;
+//            /// Write to general journal line here.....
+//            if dataChecksPassed then begin
+//                if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
+//                    dataChecksPassed := false;
+//                    dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
+//                    ClearLastError();
+//                end;
+//            end;
             
 
             if dataChecksPassed then begin
@@ -139,28 +139,28 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         until (tempIFBAT.next = 0) OR (dataChecksPassed = false);
 
 
-        if dataChecksPassed then begin
-
-            /// Post the batch code here
-            IBMSetup.get;
-            genJnlLine.SetRange("Journal Template Name",IBMSetup.GenJnlTemplate);
-            genJnlLine.SetRange("Journal Batch Name",IBMSetup.GenJnlBatchCode);
-            if genJnlLine.IsEmpty() = false then begin
-                    genJnlLine.FindSet();
-                    IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch",genJnlLine) then begin
-                        WriteTransactionHistoryInformation(tempIFBAT);
-                    end
-                    else begin
-                        dataChecksPassed := false;
-                        dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
-                        ClearLastError();
-                    end;
-            end
-            else begin
-                dataChecksPassed := false;
-                dataCheckFailDescription := 'POST FAILED: NO JOURNALS CREATED';
-            end;
-        end;
+//        if dataChecksPassed then begin
+//
+//            /// Post the batch code here
+//            IBMSetup.get;
+//            genJnlLine.SetRange("Journal Template Name",IBMSetup.GenJnlTemplate);
+//            genJnlLine.SetRange("Journal Batch Name",IBMSetup.GenJnlBatchCode);
+//            if genJnlLine.IsEmpty() = false then begin
+//                    genJnlLine.FindSet();
+//                    IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch",genJnlLine) then begin
+//                        WriteTransactionHistoryInformation(tempIFBAT);
+//                    end
+//                    else begin
+//                        dataChecksPassed := false;
+//                        dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
+//                        ClearLastError();
+//                    end;
+//            end
+//            else begin
+//                dataChecksPassed := false;
+//                dataCheckFailDescription := 'POST FAILED: NO JOURNALS CREATED';
+//            end;
+//        end;
 
         if dataChecksPassed = false then begin 
             tempIFRET.RESDS := dataCheckFailDescription;
