@@ -129,10 +129,13 @@ codeunit 50203 "NAC.IBMNAV.Posting"
 
             /// Write to general journal line here.....
             if dataChecksPassed then begin
+                commit;
                 if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
-                    dataChecksPassed := false;
-                    dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
-                    ClearLastError();
+                    if GetLastErrorText() <> '' then begin
+                        dataChecksPassed := false;
+                        dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()),1,128); /// Shortened to exclude carrage return
+                        ClearLastError();
+                    end;
                 end;
             end;
             
@@ -180,6 +183,17 @@ codeunit 50203 "NAC.IBMNAV.Posting"
 
         WriteFinalResponseInformation(tempIFRET);
     end;
+
+    /// This function removes TAB, LF and CR from text. ie ErrorMessages
+    local procedure RemoveBadChars(textWithBadChars:Text):Text
+    var
+        ch:text[3];
+    begin
+        ch[1] := 9; /// TAB
+        ch[2] := 10; /// LF
+        ch[3] := 13; /// CR
+        Exit(DelChr(textWithBadChars,'=',ch));
+    end;   
 
     local procedure WriteTransactionHistoryInformation(var tempIFBAT:Record"NAC.IBMNAV.IFBAT"temporary)
     begin

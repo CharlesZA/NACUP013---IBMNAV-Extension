@@ -38,7 +38,7 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
         genJnlLine.Validate("Posting Date",rec.POSTDAT);
         genJnlLine.Validate("Document Date",rec.DOCDAT);
 
-        Evaluate(genJnlLine."Account Type",rec.ACCTYP);
+        Evaluate(genJnlLine."Account Type", SetAccType(rec.ACCTYP));
         genJnlLine.Validate("Account Type");
 
         genJnlLine.Validate("Account No.",rec.ACCTNO);
@@ -74,6 +74,16 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
 
 
         genJnlLine.Modify();
+    end;
+
+    local procedure SetAccType(accType:Code[10]):Code[20]
+    begin
+        /// Integration specific stuff
+        if accType = 'GL' then exit('G/L Account');
+        if accType = 'CUSTOMER' then exit('Customer');
+        if accType = 'VENDOR' then exit('Vendor');
+
+        exit(accType);
     end;
 
 }
