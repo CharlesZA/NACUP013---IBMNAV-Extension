@@ -5,20 +5,22 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
     TableNo = "NAC.IBMNAV.IFBAT";
     var
         genJnlLine:Record"Gen. Journal Line";
-        IBMNAVSetup:Record"NAC.IBMNAV.Setup";
-        GLSetup:Record"General Ledger Setup";
+        iBMNAVSetup:Record"NAC.IBMNAV.Setup";
+        gLSetup:Record"General Ledger Setup";
         sourceCodeSetup:Record"Source Code Setup";
     trigger OnRun()
     begin
-        IBMNAVSetup.get;
-        GLSetup.get;
+        iBMNAVSetup.get;
+        gLSetup.get;
         sourceCodeSetup.get;
 
         genJnlLine.init;
-        genJnlLine."Journal Template Name" := IBMNAVSetup.GenJnlTemplate;
-        genJnlLine."Journal Batch Name" := IBMNAVSetup.GenJnlBatchCode;;
+        genJnlLine."Journal Template Name" := iBMNAVSetup.GenJnlTemplate;
+        genJnlLine."Journal Batch Name" := iBMNAVSetup.GenJnlBatchCode;;
         genJnlLine."Line No." := rec.SEQ;
         genJnlLine.Insert;
+
+        genJnlLine.SetHideValidation(true);
 
         genJnlLine."NAC.IBMNAV Sequence No." := rec.SEQ;
         genJnlLine."NAC.IBMNAV Trancaction Code" := rec.TID;
@@ -44,7 +46,7 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
         genJnlLine.Validate("External Document No.",rec.EXTDOC);
         genJnlLine.Validate(Description,rec.TRND);
 
-        if rec.CURR <> GLSetup."LCY Code" then begin
+        if rec.CURR <> gLSetup."LCY Code" then begin
             genJnlLine.Validate("Currency Code",rec.CURR);
             genJnlLine.Validate("Currency Factor",rec.XRATE);
         end;
@@ -60,15 +62,15 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
 
 
         /// Dimensions
-        if rec.DIM1 <> '' then if GLSetup."Shortcut Dimension 1 Code" <> '' then  genJnlLine.validate("Shortcut Dimension 1 Code",rec.DIM1);
-        if rec.DIM2 <> '' then if GLSetup."Shortcut Dimension 2 Code" <> '' then  genJnlLine.validate("Shortcut Dimension 2 Code",rec.DIM2);
+        if rec.DIM1 <> '' then if gLSetup."Shortcut Dimension 1 Code" <> '' then  genJnlLine.validate("Shortcut Dimension 1 Code",rec.DIM1);
+        if rec.DIM2 <> '' then if gLSetup."Shortcut Dimension 2 Code" <> '' then  genJnlLine.validate("Shortcut Dimension 2 Code",rec.DIM2);
 
-        if rec.DIM3 <> '' then if GLSetup."Shortcut Dimension 3 Code" <> '' then genJnlLine.ValidateShortcutDimCode(3,rec.DIM3);
-        if rec.DIM4 <> '' then if GLSetup."Shortcut Dimension 4 Code" <> '' then genJnlLine.ValidateShortcutDimCode(4,rec.DIM3);
-        if rec.DIM5 <> '' then if GLSetup."Shortcut Dimension 5 Code" <> '' then genJnlLine.ValidateShortcutDimCode(5,rec.DIM3);
-        if rec.DIM6 <> '' then if GLSetup."Shortcut Dimension 6 Code" <> '' then genJnlLine.ValidateShortcutDimCode(6,rec.DIM3);
-        if rec.DIM7 <> '' then if GLSetup."Shortcut Dimension 7 Code" <> '' then genJnlLine.ValidateShortcutDimCode(7,rec.DIM3);
-        if rec.DIM8 <> '' then if GLSetup."Shortcut Dimension 8 Code" <> '' then genJnlLine.ValidateShortcutDimCode(8,rec.DIM3);
+        if rec.DIM3 <> '' then if gLSetup."Shortcut Dimension 3 Code" <> '' then genJnlLine.ValidateShortcutDimCode(3,rec.DIM3);
+        if rec.DIM4 <> '' then if gLSetup."Shortcut Dimension 4 Code" <> '' then genJnlLine.ValidateShortcutDimCode(4,rec.DIM3);
+        if rec.DIM5 <> '' then if gLSetup."Shortcut Dimension 5 Code" <> '' then genJnlLine.ValidateShortcutDimCode(5,rec.DIM3);
+        if rec.DIM6 <> '' then if gLSetup."Shortcut Dimension 6 Code" <> '' then genJnlLine.ValidateShortcutDimCode(6,rec.DIM3);
+        if rec.DIM7 <> '' then if gLSetup."Shortcut Dimension 7 Code" <> '' then genJnlLine.ValidateShortcutDimCode(7,rec.DIM3);
+        if rec.DIM8 <> '' then if gLSetup."Shortcut Dimension 8 Code" <> '' then genJnlLine.ValidateShortcutDimCode(8,rec.DIM3);
 
 
         genJnlLine.Modify();

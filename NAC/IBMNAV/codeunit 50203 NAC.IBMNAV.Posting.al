@@ -8,9 +8,9 @@
 codeunit 50203 "NAC.IBMNAV.Posting"
 {
     var
-        IBMSetup:Record"NAC.IBMNAV.Setup";
-        IFRET:Record"NAC.IBMNAV.IFRET";
-        IFBAT:Record"NAC.IBMNAV.IFBAT";
+        iBMSetup:Record"NAC.IBMNAV.Setup";
+        iFRET:Record"NAC.IBMNAV.IFRET";
+        iFBAT:Record"NAC.IBMNAV.IFBAT";
         transactionType:Record"NAC.IBMNAV.TransactionType";
         transactionEntry:Record"NAC.IBMNAV.TransactionEntry";
         dialogWindow:Dialog;
@@ -34,23 +34,23 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         subString := 'Processing %1 %2 %3';
         firstLine := true;
 
-        if IFBAT.FindFirst() then begin
+        if iFBAT.FindFirst() then begin
             repeat
 
                 if firstLine then begin
                     firstLine := false;
-                    transactionId := IFBAT.ID;
+                    transactionId := iFBAT.ID;
                 end;
 
-                UpdateDialog(strsubstno(subString,IFBAT.ID,IFBAT.TID,IFBAT.SEQ));
+                UpdateDialog(strsubstno(subString,iFBAT.ID,iFBAT.TID,iFBAT.SEQ));
 
-                if transactionId <> IFBAT.ID then begin
+                if transactionId <> iFBAT.ID then begin
                     PostBatchInformation(tempIFBAT,tempIFRET);
                     tempIFBAT.DeleteAll(false);
                     tempIFRET.DeleteAll(false);
 
                     tempIFBAT.Init();
-                    tempIFBAT.TransferFields(IFBAT);
+                    tempIFBAT.TransferFields(iFBAT);
                     tempIFBAT.insert(FALSE);
 
                     tempIFRET.Init();
@@ -63,7 +63,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                 end
                 else begin
                     tempIFBAT.Init();
-                    tempIFBAT.TransferFields(IFBAT);
+                    tempIFBAT.TransferFields(iFBAT);
                     tempIFBAT.insert(FALSE);
 
                     tempIFRET.Init();
@@ -73,7 +73,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                     tempIFRET.RESDS := 'NOT PROCESSED';
                     tempIFRET.Insert(FALSE);
                 end;
-            Until IFBAT.next = 0;
+            Until iFBAT.next = 0;
 
             PostBatchInformation(tempIFBAT,tempIFRET);    /// Last Batch
             tempIFBAT.DeleteAll(false);
@@ -89,16 +89,24 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         dataCheckFailDescription:Text[128]; 
         genJnlLine:Record"Gen. Journal Line";
     begin
-        /// Save Temp History records to the transaction entry table.
-        /// Clear Temp records.
-        /// Pass or Fail write temp records to IFRET
+
+        /// Ensure the batch is clear
+        iBMSetup.get;
+        iBMSetup.TestField(GenJnlTemplate);
+        iBMSetup.TestField(GenJnlBatchCode);
+        genJnlLine.SetRange("Journal Template Name",iBMSetup.GenJnlTemplate);
+        genJnlLine.SetRange("Journal Batch Name",iBMSetup.GenJnlBatchCode);
+        genJnlLine.SetHideValidation(true);
+        if genJnlLine.IsEmpty() = false then genJnlLine.DeleteAll(true);
+
+
         tempIFBAT.FindSet();
         repeat
             tempIFRET.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ);
 
             /// Checking Data for Errors
             dataChecksPassed := true;
-            if transactionType.get(IFBAT.TID) then begin
+            if transactionType.get(iFBAT.TID) then begin
                 if transactionType.Blocked then begin
                     /// This is a fail
                     dataCheckFailDescription := 'TRANSACTION TYPE IS BLOCKED IN NAV';
@@ -119,14 +127,14 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                 end;
             end;
 
-//            /// Write to general journal line here.....
-//            if dataChecksPassed then begin
-//                if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
-//                    dataChecksPassed := false;
-//                    dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
-//                    ClearLastError();
-//                end;
-//            end;
+            /// Write to general journal line here.....
+            if dataChecksPassed then begin
+                if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
+                    dataChecksPassed := false;
+                    dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
+                    ClearLastError();
+                end;
+            end;
             
 
             if dataChecksPassed then begin
@@ -190,9 +198,9 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         if tempIFRET.IsEmpty() = false then begin
             tempIFRET.FindSet();
             repeat
-                IFRET.init;
-                IFRET.TransferFields(tempIFRET);
-                IFRET.Insert();
+                iFRET.init;
+                iFRET.TransferFields(tempIFRET);
+                iFRET.Insert();
             until tempIFRET.next = 0;
         end;
     end;

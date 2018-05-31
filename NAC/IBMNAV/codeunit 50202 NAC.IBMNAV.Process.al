@@ -8,9 +8,10 @@ codeunit 50202 "NAC.IBMNAV.Process"
 
     var
         dataTransfer :Codeunit "NAC.IBMNAV.ACL";
-        IBMNAVSetup:Record"NAC.IBMNAV.Setup";
+        iBMNAVSetup:Record"NAC.IBMNAV.Setup";
 
         dialogWindow:Dialog;
+        dialogWindowOpen:Boolean;
         
 
     trigger OnRun();
@@ -49,11 +50,11 @@ codeunit 50202 "NAC.IBMNAV.Process"
 
     local procedure PrepareNAVSendAndRecieveTables()
     var
-        IFRET:Record"NAC.IBMNAV.IFRET";
-        IFBAT:Record"NAC.IBMNAV.IFBAT";
+        iFRET:Record"NAC.IBMNAV.IFRET";
+        iFBAT:Record"NAC.IBMNAV.IFBAT";
     begin
-        IFBAT.DeleteAll(false);
-        IFRET.DeleteAll(false);
+        iFBAT.DeleteAll(false);
+        iFRET.DeleteAll(false);
     end;
 
 
@@ -61,19 +62,27 @@ codeunit 50202 "NAC.IBMNAV.Process"
     local procedure OpenDialog()
     begin
         if GuiAllowed() then begin
-            dialogWindow.Open('Processing NAC.IBMNAV\\Current Activity #1###############');
+            if dialogWindowOpen = false then begin
+                dialogWindow.Open('Processing NAC.IBMNAV\\Current Activity #1###############');
+                dialogWindowOpen := true;
+            end;
         end;
     end;
     local procedure UpdateDialog(progressText:Text[50])
     begin
         if GuiAllowed() then begin
-            dialogWindow.Update(1,progressText);
+            if dialogWindowOpen then begin
+                dialogWindow.Update(1,progressText);
+            end;
         end;
     end;
     local procedure CloseDialog()
     begin
         if GuiAllowed() then begin
-            dialogWindow.Close();
+            if dialogWindowOpen then begin
+                dialogWindow.Close();
+                dialogWindowOpen := false;
+            end;
         end;
     end;
 
@@ -83,14 +92,14 @@ codeunit 50202 "NAC.IBMNAV.Process"
         processBlob:Record"NAC.IBMNAV.ProcessBlob";
     begin
         UpdateDialog('Cleaning Up Staging Files');
-        processBlob.EraseServerFile(IBMNAVSetup.DataStagingPath + '\' + IBMNAVSetup.DataStagingBatchFileName);
-        processBlob.EraseServerFile(IBMNAVSetup.DataStagingPath + '\' + IBMNAVSetup.DataStagingResponseFileName);
+        processBlob.EraseServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.DataStagingBatchFileName);
+        processBlob.EraseServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.DataStagingResponseFileName);
     end;
 
     local procedure UploadDataToIBM()
     begin
         UpdateDialog('Uploading Data to IBM');
-        if dataTransfer.DataTransfer_Upload(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataDefinitionResponseFileName) then begin
+        if dataTransfer.DataTransfer_Upload(iBMNAVSetup.DataDefinitionPath + '\' + iBMNAVSetup.DataDefinitionResponseFileName) then begin
             /// Success
         end            
         else begin
@@ -100,7 +109,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
 
     local procedure ExportUploadDataForIBM()
     var
-        IFRETExport:XmlPort"NAC.IBMNAV.IFRETXMLP";
+        iFRETExport:XmlPort"NAC.IBMNAV.IFRETXMLP";
         txtOutStream:OutStream;
         processBlob:Record"NAC.IBMNAV.ProcessBlob";
         txtIFRETID:Code[10];
@@ -114,10 +123,10 @@ codeunit 50202 "NAC.IBMNAV.Process"
 
         processBlob.CalcFields(TempBlob);
         processBlob.TempBlob.CreateOutStream(txtOutStream);
-        IFRETExport.SetDestination(txtOutStream);
-        IFRETExport.Export();
+        iFRETExport.SetDestination(txtOutStream);
+        iFRETExport.Export();
         processBlob.Modify(FALSE);
-        processBlob.ExportToServerFile(IBMNAVSetup.DataStagingPath + '\' + IBMNAVSetup.DataStagingResponseFileName,true);
+        processBlob.ExportToServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.DataStagingResponseFileName,true);
 
         processBlob.get(txtIFRETID);
         processBlob.Delete(false);
@@ -125,7 +134,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
 
     local procedure ImportDownloadedDataIntoNAV()
     var
-        IFBATImport:XmlPort"NAC.IBMNAV.IFBATXMLP";
+        iFBATImport:XmlPort"NAC.IBMNAV.IFBATXMLP";
         txtInStream:InStream;
         processBlob:Record"NAC.IBMNAV.ProcessBlob";
         txtIFBATID:Code[10];
@@ -137,13 +146,13 @@ codeunit 50202 "NAC.IBMNAV.Process"
         processBlob.PrimaryKey := txtIFBATID;
         processBlob.Insert(false);
         
-        processBlob.ImportFromServerFile(IBMNAVSetup.DataStagingPath + '\' + IBMNAVSetup.DataStagingBatchFileName);
+        processBlob.ImportFromServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.DataStagingBatchFileName);
         processBlob.get(txtIFBATID);
         processBlob.CalcFields(TempBlob);
         processBlob.TempBlob.CreateInStream(txtInStream);
 
-        IFBATImport.SetSource(txtInStream);
-        IFBATImport.Import();
+        iFBATImport.SetSource(txtInStream);
+        iFBATImport.Import();
 
         processBlob.Delete(FALSE);        
     end;
@@ -151,7 +160,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
     local procedure DownloadDataFromIBM()
     begin
         UpdateDialog('Downloading Data from IBM');
-        if dataTransfer.DataTransfer_Download(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataDefinitionBatchFileName) then begin
+        if dataTransfer.DataTransfer_Download(iBMNAVSetup.DataDefinitionPath + '\' + iBMNAVSetup.DataDefinitionBatchFileName) then begin
             /// Success
         end    
         else begin
@@ -163,29 +172,29 @@ codeunit 50202 "NAC.IBMNAV.Process"
     local procedure VerifyIBMNAVSetup()
     begin
         UpdateDialog('Verifying Setup Information');
-        IBMNAVSetup.GET;
+        iBMNAVSetup.GET;
         /// Data Definitions
         /// *ToDo: Add a check to see if these file actually exist on the server.
-        IBMNAVSetup.TestField(DataDefinitionPath);
-        IBMNAVSetup.TestField(DataDefinitionBatchFileName);
-        IBMNAVSetup.TestField(DataDefinitionResponseFileName);
+        iBMNAVSetup.TestField(DataDefinitionPath);
+        iBMNAVSetup.TestField(DataDefinitionBatchFileName);
+        iBMNAVSetup.TestField(DataDefinitionResponseFileName);
         /// Staging
-        IBMNAVSetup.TestField(DataStagingPath);
-        IBMNAVSetup.TestField(DataStagingResponseFileName);
-        IBMNAVSetup.TestField(DataStagingBatchFileName);
+        iBMNAVSetup.TestField(DataStagingPath);
+        iBMNAVSetup.TestField(DataStagingResponseFileName);
+        iBMNAVSetup.TestField(DataStagingBatchFileName);
         /// Posting
-        IBMNAVSetup.TestField(GenJnlTemplate);
-        IBMNAVSetup.TestField(GenJnlBatchCode);
+        iBMNAVSetup.TestField(GenJnlTemplate);
+        iBMNAVSetup.TestField(GenJnlBatchCode);
     end;
 
     /// This is just a test function and can be removed later
     procedure ProcessExportIFRETTest();
     var
-        IFRETExport:XmlPort"NAC.IBMNAV.IFRETXMLP";
+        iFRETExport:XmlPort"NAC.IBMNAV.IFRETXMLP";
         txtOutStream:OutStream;
         processBlob:Record"NAC.IBMNAV.ProcessBlob";
     begin
-        IBMNAVSetup.get();
+        iBMNAVSetup.get();
         VerifyIBMNAVSetup();
 
         if processBlob.get() = false then begin
@@ -200,10 +209,10 @@ codeunit 50202 "NAC.IBMNAV.Process"
 
         processBlob.CalcFields(TempBlob);
         processBlob.TempBlob.CreateOutStream(txtOutStream);
-        IFRETExport.SetDestination(txtOutStream);
-        IFRETExport.Export();
+        iFRETExport.SetDestination(txtOutStream);
+        iFRETExport.Export();
         processBlob.Modify(FALSE);
-        processBlob.ExportToServerFile(IBMNAVSetup.DataStagingPath + '\' + IBMNAVSetup.DataStagingResponseFileName,true);
+        processBlob.ExportToServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.DataStagingResponseFileName,true);
 
         processBlob.get();
         processBlob.Delete(false);
@@ -215,7 +224,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
     /// This is just a test function and can be removed later
     procedure ProcessImportIFBATTest();
     var
-        IFBATImport:XmlPort"NAC.IBMNAV.IFBATXMLP";
+        iFBATImport:XmlPort"NAC.IBMNAV.IFBATXMLP";
         txtInStream:InStream;
         processBlob:Record"NAC.IBMNAV.ProcessBlob";
     begin
@@ -231,13 +240,13 @@ codeunit 50202 "NAC.IBMNAV.Process"
             processBlob.Insert(false);
         end;
         
-        processBlob.ImportFromServerFile(IBMNAVSetup.DataStagingPath + '\' + IBMNAVSetup.DataStagingBatchFileName);
+        processBlob.ImportFromServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.DataStagingBatchFileName);
         processBlob.get();
         processBlob.CalcFields(TempBlob);
         processBlob.TempBlob.CreateInStream(txtInStream);
 
-        IFBATImport.SetSource(txtInStream);
-        IFBATImport.Import();
+        iFBATImport.SetSource(txtInStream);
+        iFBATImport.Import();
 
         processBlob.Delete(FALSE);
         
@@ -248,10 +257,10 @@ codeunit 50202 "NAC.IBMNAV.Process"
     /// This is just a test function and can be removed later
     procedure ProcessDownloadTest();
     begin
-        IBMNAVSetup.get;
+        iBMNAVSetup.get;
         VerifyIBMNAVSetup();
 
-        if dataTransfer.DataTransfer_Download(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataDefinitionBatchFileName) then
+        if dataTransfer.DataTransfer_Download(iBMNAVSetup.DataDefinitionPath + '\' + iBMNAVSetup.DataDefinitionBatchFileName) then
             Message('complete')
         else
             Message('something went amiss');
@@ -261,10 +270,10 @@ codeunit 50202 "NAC.IBMNAV.Process"
     /// This is just a test function and can be removed later
     procedure ProcessUploadTest();
     begin
-        IBMNAVSetup.get;
+        iBMNAVSetup.get;
         VerifyIBMNAVSetup();
 
-        if dataTransfer.DataTransfer_Upload(IBMNAVSetup.DataDefinitionPath + '\' + IBMNAVSetup.DataDefinitionResponseFileName) then
+        if dataTransfer.DataTransfer_Upload(iBMNAVSetup.DataDefinitionPath + '\' + iBMNAVSetup.DataDefinitionResponseFileName) then
             Message('complete')
         else
             Message('something went amiss');

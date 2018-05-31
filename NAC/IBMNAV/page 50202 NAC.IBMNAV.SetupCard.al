@@ -100,9 +100,9 @@ page 50202 "NAC.IBMNAV.SetupCard"
                 Image=Post;
                 trigger OnAction();
                 var
-                    IBMProcess:Codeunit"NAC.IBMNAV.Process";
+                    iBMProcess:Codeunit"NAC.IBMNAV.Process";
                 begin
-                    IBMProcess.Code();
+                    iBMProcess.Code();
                 end;
             }
         }

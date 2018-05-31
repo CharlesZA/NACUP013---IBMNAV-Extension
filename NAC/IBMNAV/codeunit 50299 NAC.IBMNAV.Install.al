@@ -24,49 +24,49 @@ codeunit 50299 "NAC.IBMNAV.Install"
 
     local procedure HandleFreshInstall();
     var
-        IntegrationSetup:Record"NAC.IBMNAV.Setup";
+        integrationSetup:Record"NAC.IBMNAV.Setup";
         TransactionType:Record"NAC.IBMNAV.TransactionType";
-        SourceCode:Record"Source Code";
-        SourceCodeSetup:Record"Source Code Setup";
-        Company:Record"Company";
-        GenJnlBatch:Record"Gen. Journal Batch";
+        sourceCode:Record"Source Code";
+        sourceCodeSetup:Record"Source Code Setup";
+        company:Record"Company";
+        genJnlBatch:Record"Gen. Journal Batch";
     begin
         // Do work needed the first time this extension is ever installed for this tenant.
         // Some possible usages:
         // - Service callback/telemetry indicating that extension was install
         // - Initial data setup for use
-        if Company.FindFirst() then begin
+        if company.FindFirst() then begin
             repeat
 
-                IntegrationSetup.ChangeCompany(Company.Name);              
-                IntegrationSetup.init;
-                IntegrationSetup.SetupDefaults();
-                IntegrationSetup.Insert(false);
+                integrationSetup.ChangeCompany(company.Name);              
+                integrationSetup.init;
+                integrationSetup.SetupDefaults();
+                integrationSetup.Insert(false);
 
-                TransactionType.ChangeCompany(Company.Name);
-                TransactionType.SetupDefaults(Company.Name);
+                TransactionType.ChangeCompany(company.Name);
+                TransactionType.SetupDefaults(company.Name);
 
-                SourceCode.ChangeCompany(Company.Name);
-                SourceCode.Init;
-                SourceCode.Code := 'NAC.IBMNAV';
-                SourceCode.Description := 'NAC.IBMNAV Transactions';
-                if SourceCode.Insert(false) then begin end;
+                sourceCode.ChangeCompany(company.Name);
+                sourceCode.Init;
+                sourceCode.Code := 'NAC.IBMNAV';
+                sourceCode.Description := 'NAC.IBMNAV Transactions';
+                if sourceCode.Insert(false) then begin end;
 
-                SourceCodeSetup.ChangeCompany(Company.Name);
-                if SourceCodeSetup.get() then begin
-                    SourceCodeSetup."NAC.IBMNAV" := 'NAC.IBMNAV';
-                    SourceCodeSetup.Modify(false);
+                sourceCodeSetup.ChangeCompany(company.Name);
+                if sourceCodeSetup.get() then begin
+                    sourceCodeSetup."NAC.IBMNAV" := 'NAC.IBMNAV';
+                    sourceCodeSetup.Modify(false);
                 end;
 
-                GenJnlBatch.ChangeCompany(Company.Name);
-                if GenJnlBatch.Get('GENERAL','IBMNAV') = false then begin
-                    GenJnlBatch.init;
-                    GenJnlBatch."Journal Template Name" := 'GENERAL';
-                    GenJnlBatch.Name := 'IBMNAV';
-                    GenJnlBatch.Description := 'NAC.IBMNAV Transactions';
-                    GenJnlBatch.Insert(FALSE);
+                genJnlBatch.ChangeCompany(company.Name);
+                if genJnlBatch.Get('GENERAL','IBMNAV') = false then begin
+                    genJnlBatch.init;
+                    genJnlBatch."Journal Template Name" := 'GENERAL';
+                    genJnlBatch.Name := 'IBMNAV';
+                    genJnlBatch.Description := 'NAC.IBMNAV Transactions';
+                    genJnlBatch.Insert(FALSE);
                 end;
-            until Company.Next = 0;
+            until company.Next = 0;
         end;
     end;
 

@@ -65,13 +65,13 @@ table 50203 "NAC.IBMNAV.TransactionType"
 
     local procedure AddSetupDefault(defaultCode:Code[10];defaultDescription:Text[50];blocked:Boolean;companyName:Text[30]);
     var
-        IBMTransactionCode : Record "NAC.IBMNAV.TransactionType";   
+        transactionType : Record "NAC.IBMNAV.TransactionType";   
     begin
-        if companyName <> '' then IBMTransactionCode.ChangeCompany(companyName);
-        IBMTransactionCode.Init;
-        IBMTransactionCode.Code := defaultCode;
-        IBMTransactionCode.Description := defaultDescription;
-        IBMTransactionCode.Blocked := blocked;
-        if IBMTransactionCode.Insert(FALSE) = false then begin end;
+        if companyName <> '' then transactionType.ChangeCompany(companyName);
+        transactionType.Init;
+        transactionType.Code := defaultCode;
+        transactionType.Description := defaultDescription;
+        transactionType.Blocked := blocked;
+        if transactionType.Insert(FALSE) = false then begin end;
     end;
 }
