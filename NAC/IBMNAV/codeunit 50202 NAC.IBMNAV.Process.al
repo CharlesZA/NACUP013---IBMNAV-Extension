@@ -104,6 +104,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
         end            
         else begin
             /// Fail
+            ERROR('Unable to Upload file to IBM Server.')
         end;
     end;
 
@@ -165,6 +166,7 @@ codeunit 50202 "NAC.IBMNAV.Process"
         end    
         else begin
             /// Fail
+            ERROR('Unable to download file from IBM Server.')
         end;
     end;
 

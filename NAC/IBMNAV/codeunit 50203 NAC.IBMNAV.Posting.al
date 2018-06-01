@@ -73,6 +73,9 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                     tempIFRET.RESDS := 'NOT PROCESSED';
                     tempIFRET.Insert(FALSE);
                 end;
+
+                transactionId := iFBAT.ID;
+                
             Until iFBAT.next = 0;
 
             PostBatchInformation(tempIFBAT,tempIFRET);    /// Last Batch
@@ -99,55 +102,60 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         genJnlLine.SetHideValidation(true);
         if genJnlLine.IsEmpty() = false then genJnlLine.DeleteAll(true);
 
-
+        dataChecksPassed := true;
         tempIFBAT.FindSet();
         repeat
-            tempIFRET.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ);
-
-            /// Checking Data for Errors
-            dataChecksPassed := true;
-            if transactionType.get(iFBAT.TID) then begin
-                if transactionType.Blocked then begin
-                    /// This is a fail
-                    dataCheckFailDescription := 'TRANSACTION TYPE IS BLOCKED IN NAV';
-                    dataChecksPassed := false;
-                end;
-            end
-            else begin
-                /// This is a fail
-                dataCheckFailDescription := 'TRANSACTION TYPE IS NOT SETUP IN NAV';
-                dataChecksPassed := false;
-            end;
-
-            /// check if transaction has already been posted. 
-            IF dataChecksPassed then begin
-                if transactionEntry.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ) then begin
-                    dataChecksPassed := false;
-                    dataCheckFailDescription := 'TRANSACTION HAS ALREADY BEEN POSTED';
-                end;
-            end;
-
-            /// Write to general journal line here.....
-            if dataChecksPassed then begin
-                commit;
-                if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
-                    if GetLastErrorText() <> '' then begin
-                        dataChecksPassed := false;
-                        dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()),1,128); /// Shortened to exclude carrage return
-                        ClearLastError();
-                    end;
-                end;
-            end;
             
 
             if dataChecksPassed then begin
-                tempIFRET.RESCD := 'SUCCESS';
-                tempIFRET.RESDS := '';
-                tempIFRET.DATE := Today();
-                tempIFRET.TIME := Time();
-                tempIFRET.Modify(false);
+
+                tempIFRET.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ);
+
+                /// Checking Data for Errors
+                if transactionType.get(iFBAT.TID) then begin
+                    if transactionType.Blocked then begin
+                        /// This is a fail
+                        dataCheckFailDescription := 'TRANSACTION TYPE IS BLOCKED IN NAV';
+                        dataChecksPassed := false;
+                    end;
+                end
+                else begin
+                    /// This is a fail
+                    dataCheckFailDescription := 'TRANSACTION TYPE IS NOT SETUP IN NAV';
+                    dataChecksPassed := false;
+                end;
+
+                /// check if transaction has already been posted. 
+                IF dataChecksPassed then begin
+                    if transactionEntry.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ) then begin
+                        dataChecksPassed := false;
+                        dataCheckFailDescription := 'TRANSACTION HAS ALREADY BEEN POSTED';
+                    end;
+                end;
+
+                /// Write to general journal line here.....
+                if dataChecksPassed then begin
+                    commit;  /// This is here because of the way AL handles things unlike C\AL
+                    if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
+                        if GetLastErrorText() <> '' then begin
+                            dataChecksPassed := false;
+                            dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()),1,128); /// Shortened to exclude carrage return
+                            ClearLastError();
+                        end;
+                    end;
+                end;
+                
+
+                if dataChecksPassed then begin
+                    tempIFRET.RESCD := 'SUCCESS';
+                    tempIFRET.RESDS := '';
+                    tempIFRET.DATE := Today();
+                    tempIFRET.TIME := Time();
+                    tempIFRET.Modify(false);
+                end;
+
             end;
-        until (tempIFBAT.next = 0) OR (dataChecksPassed = false);
+        until (tempIFBAT.next() = 0) or (dataChecksPassed = false);
 
 
 //        if dataChecksPassed then begin
