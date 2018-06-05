@@ -158,28 +158,29 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         until (tempIFBAT.next() = 0) or (dataChecksPassed = false);
 
 
-//        if dataChecksPassed then begin
-//
-//            /// Post the batch code here
-//            IBMSetup.get;
-//            genJnlLine.SetRange("Journal Template Name",IBMSetup.GenJnlTemplate);
-//            genJnlLine.SetRange("Journal Batch Name",IBMSetup.GenJnlBatchCode);
-//            if genJnlLine.IsEmpty() = false then begin
-//                    genJnlLine.FindSet();
-//                    IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch",genJnlLine) then begin
-//                        WriteTransactionHistoryInformation(tempIFBAT);
-//                    end
-//                    else begin
-//                        dataChecksPassed := false;
-//                        dataCheckFailDescription := CopyStr(GetLastErrorText(),1,128);
-//                        ClearLastError();
-//                    end;
-//            end
-//            else begin
-//                dataChecksPassed := false;
-//                dataCheckFailDescription := 'POST FAILED: NO JOURNALS CREATED';
-//            end;
-//        end;
+        if dataChecksPassed then begin
+
+            /// Post the batch code here
+            iBMSetup.get;
+            genJnlLine.SetRange("Journal Template Name",IBMSetup.GenJnlTemplate);
+            genJnlLine.SetRange("Journal Batch Name",IBMSetup.GenJnlBatchCode);
+            if genJnlLine.IsEmpty() = false then begin
+                    genJnlLine.FindSet();
+                    commit;
+                    IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch",genJnlLine) then begin
+                        WriteTransactionHistoryInformation(tempIFBAT);
+                    end
+                    else begin
+                        dataChecksPassed := false;
+                        dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()),1,128);
+                        ClearLastError();
+                    end;
+            end
+            else begin
+                dataChecksPassed := false;
+                dataCheckFailDescription := 'POST FAILED: NO JOURNALS CREATED';
+            end;
+        end;
 
         if dataChecksPassed = false then begin 
             tempIFRET.RESDS := dataCheckFailDescription;
