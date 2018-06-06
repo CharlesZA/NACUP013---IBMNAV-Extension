@@ -168,8 +168,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                     genJnlLine.FindSet();
                     commit;
                     IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch",genJnlLine) then begin
-/// ToDo: Put back after testing
-//                        WriteTransactionHistoryInformation(tempIFBAT);
+                        WriteTransactionHistoryInformation(tempIFBAT);
                     end
                     else begin
                         dataChecksPassed := false;

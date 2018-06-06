@@ -11,7 +11,7 @@ tableextension 50210 "NAC.IBMNAV.CustEntry" extends "Cust. Ledger Entry"
             Editable=false;
             Caption='IBM Transaction No.';
         }
-        field(50202;"NAC.IBMNAV Trancaction Code";code[10])
+        field(50202;"NAC.IBMNAV Transaction Code";code[10])
         {
             Editable=false;
             Caption='IBM Transaction Code';

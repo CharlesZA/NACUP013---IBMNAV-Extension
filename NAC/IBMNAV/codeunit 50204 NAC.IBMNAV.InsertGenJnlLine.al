@@ -23,7 +23,7 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
         genJnlLine.SetHideValidation(true);
 
         genJnlLine."NAC.IBMNAV Sequence No." := rec.SEQ;
-        genJnlLine."NAC.IBMNAV Trancaction Code" := rec.TID;
+        genJnlLine."NAC.IBMNAV Transaction Code" := rec.TID;
         genJnlLine."NAC.IBMNAV Transaction No." := rec.ID;
 
         genJnlLine."Source Code" := sourceCodeSetup."NAC.IBMNAV";

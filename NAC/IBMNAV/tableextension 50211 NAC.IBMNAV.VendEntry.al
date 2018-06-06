@@ -11,7 +11,7 @@ tableextension 50211 "NAC.IBMNAV.VendEntry" extends "Vendor Ledger Entry"
             Editable=false;
             Caption='IBM Transaction No.';
         }
-        field(50202;"NAC.IBMNAV Trancaction Code";code[10])
+        field(50202;"NAC.IBMNAV Transaction Code";code[10])
         {
             Editable=false;
             Caption='IBM Transaction Code';
