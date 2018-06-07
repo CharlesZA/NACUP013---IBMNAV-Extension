@@ -14,6 +14,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         transactionType:Record"NAC.IBMNAV.TransactionType";
         transactionEntry:Record"NAC.IBMNAV.TransactionEntry";
         dialogWindow:Dialog;
+        dialogWindowOpen:Boolean;
 
 
     trigger OnRun()
@@ -232,19 +233,27 @@ codeunit 50203 "NAC.IBMNAV.Posting"
     local procedure OpenDialog()
     begin
         if GuiAllowed() then begin
-            dialogWindow.Open('NAC.IBMNAV Posting Activities\\Current Activity #1###############');
+            if dialogWindowOpen = false then begin
+                dialogWindow.Open('NAC.IBMNAV Posting Activities\\Current Activity #1###############');
+                dialogWindowOpen := true;
+            end;
         end;
     end;
     local procedure UpdateDialog(progressText:Text[50])
     begin
         if GuiAllowed() then begin
-            dialogWindow.Update(1,progressText);
+            if dialogWindowOpen then begin
+                dialogWindow.Update(1,progressText);
+            end;
         end;
     end;
     local procedure CloseDialog()
     begin
         if GuiAllowed() then begin
-            dialogWindow.Close();
+            if dialogWindowOpen then begin
+                dialogWindow.Close();
+                dialogWindowOpen := false;
+            end;
         end;
     end;
 
