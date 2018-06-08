@@ -8,6 +8,10 @@ page 50207 "NAC.IBMNAV.TransactionEntries"
     Caption = 'NAC.IBMNAV Transaction Entries';
     ApplicationArea = All;
     UsageCategory = History;
+    DeleteAllowed = false;
+    Editable = false;
+    InsertAllowed = false;
+    ModifyAllowed = false;
     
     layout
     {

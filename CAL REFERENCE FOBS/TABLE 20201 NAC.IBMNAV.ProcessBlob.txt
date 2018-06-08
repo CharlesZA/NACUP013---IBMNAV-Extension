@@ -1,0 +1,90 @@
+OBJECT Table 50201 NAC.IBMNAV.ProcessBlob
+{
+  OBJECT-PROPERTIES
+  {
+    Date=25-05-18;
+    Time=08:32:50;
+    Version List=NACUP013.00;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;PrimaryKey          ;Code10        ;DataClassification=ToBeClassified }
+    { 10  ;   ;TempBlob            ;BLOB          ;DataClassification=ToBeClassified }
+  }
+  KEYS
+  {
+    {    ;PrimaryKey                              ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+    VAR
+      FileDoesNotExistErr@1000 : TextConst '@@@=%1 File Path;ENU=The file %1 does not exist.';
+      FileAlreadyExistsErr@1001 : TextConst 'ENU=The file name %1 already exists.';
+
+    [External]
+    PROCEDURE ImportFromServerFile@1(filePath@1000 : Text[250]);
+    VAR
+      OutStream@1003 : OutStream;
+      InStream@1002 : InStream;
+      InputFile@1001 : File;
+    BEGIN
+        IF NOT FILE.EXISTS(filePath) THEN
+          ERROR(FileDoesNotExistErr,filePath);
+
+        InputFile.OPEN(filePath);
+        InputFile.CREATEINSTREAM(InStream);
+        TempBlob.CREATEOUTSTREAM(OutStream);
+        COPYSTREAM(OutStream,InStream);
+        InputFile.CLOSE;
+        MODIFY(FALSE);
+    END;
+
+    [External]
+    PROCEDURE ExportToServerFile@2(filePath@1000 : Text[250];overwriteFile@1001 : Boolean);
+    VAR
+      OutStream@1004 : OutStream;
+      InStream@1003 : InStream;
+      OutputFile@1002 : File;
+    BEGIN
+        IF FILE.EXISTS(filePath) THEN
+          IF overwriteFile THEN
+            FILE.ERASE(filePath)
+          ELSE
+            ERROR(FileAlreadyExistsErr,filePath);
+
+        OutputFile.WRITEMODE(TRUE);
+        OutputFile.CREATE(filePath);
+        OutputFile.CREATEOUTSTREAM(OutStream);
+        TempBlob.CREATEINSTREAM(InStream);
+        COPYSTREAM(OutStream,InStream);
+        OutputFile.CLOSE;
+    END;
+
+    [External]
+    PROCEDURE EraseServerFile@3(filePath@1000 : Text[250]);
+    BEGIN
+        IF FILE.EXISTS(filePath) THEN
+          FILE.ERASE(filePath);
+    END;
+
+    [External]
+    PROCEDURE ServerFileExists@4(filePath@1000 : Text[250]) : Boolean;
+    BEGIN
+        EXIT(FILE.EXISTS(filePath));
+    END;
+
+    BEGIN
+    {
+      /// NACUP013
+      /// Helper table for processing XmlPorts from extensions with Server Files
+    }
+    END.
+  }
+}
+

@@ -1,0 +1,74 @@
+OBJECT Codeunit 50201 NAC.IBMNAV.ACL
+{
+  OBJECT-PROPERTIES
+  {
+    Date=22-05-18;
+    Time=13:12:16;
+    Version List=NACUP012.00;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+            //IF CONFIRM('Download Run test') THEN PerformDownloadTest();
+            //IF CONFIRM('Upload Run test') THEN PerformUploadTest();
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      dataTransfer@1000 : DotNet "'NAC.IBMNAV.ACL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'.NAC.IBMNAV.ACL.DataTransfer";
+      ACSBundleLocation@1001 : TextConst 'ENU=C:\Users\Public\IBM\ClientSolutions\acsbundle.jar';
+
+    [External]
+    PROCEDURE DataTransfer_Download@4(dataDefinitionLocation_dtfx@1000 : Text) : Boolean;
+    BEGIN
+      // NOTES: Performs a download request on the IBM server.
+      //
+      //        You are requred to know after the execute has completed where the
+      //        downloaded file will reside as this information is saved in the
+      //        dtfx file.
+      //
+      //        Please see project documentation for more information.
+
+        dataTransfer := dataTransfer.DataTransfer();
+        dataTransfer.ACSBundleLocation := ACSBundleLocation;
+        dataTransfer.DataDefinitionLocation := dataDefinitionLocation_dtfx;
+
+        IF dataTransfer.ExecuteTransfer() THEN EXIT(TRUE) ELSE EXIT(FALSE);
+    END;
+
+    [External]
+    PROCEDURE DataTransfer_Upload@5(dataDefinitionLocation_dttx@1000 : Text) : Boolean;
+    BEGIN
+      // NOTES: Perform an upload request to the IBM Server.
+      //
+      //        You are required to have already saved the upload file to a location
+      //        where it is specified in the dttx file.
+      //
+      //        Please see project documentation for more information.
+
+        dataTransfer := dataTransfer.DataTransfer();
+        dataTransfer.ACSBundleLocation := ACSBundleLocation;
+        dataTransfer.DataDefinitionLocation := dataDefinitionLocation_dttx;
+        dataTransfer.EnableUpload := TRUE;
+
+        IF dataTransfer.ExecuteTransfer() THEN EXIT(TRUE) ELSE EXIT(FALSE);
+    END;
+
+    BEGIN
+    {
+      // NACUP012 :: INIT - iSeries Wrapping for NAV
+      //
+      // NAC.IBMNAV.ACL
+      //
+      // NOTES: This codeunit calls the managed application that communicates with the IBM iSeries Client Access Toolkit
+      //        The managed application that is responsible for communicating to the IBM server is a DLL that is installed
+      //        to the Add-ins folder on the NAV Service tier called NAC.IBMNAV.ACL.dll
+      //
+      //        TEXTCONST   ACSBundleLocation   C:\Users\Public\IBM\ClientSolutions\acsbundle.jar
+    }
+    END.
+  }
+}
+
