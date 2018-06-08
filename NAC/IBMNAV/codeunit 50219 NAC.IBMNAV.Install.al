@@ -1,6 +1,6 @@
 /// This codeunit is responsible for installing the extension to the database.
 
-codeunit 50299 "NAC.IBMNAV.Install"
+codeunit 50219 "NAC.IBMNAV.Install"
 {
     Subtype = Install;
     Description = 'Extension Install Codeunit';
