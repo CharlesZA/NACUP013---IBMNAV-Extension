@@ -9,6 +9,15 @@ codeunit 50205 "NAC.IBMNAV.PostingEventHandler"
     begin
     end;
 
+/// LOCAL [External] [IntegrationEvent] OnAfterCopyGLEntryFromGenJnlLine(VAR GLEntry : Record "G/L Entry";VAR GenJournalLine : Record "Gen. Journal Line")
+    [EventSubscriber(ObjectType::Table, Database::"G/L Entry", 'OnAfterCopyGLEntryFromGenJnlLine', '', true, false)]
+    local procedure OnAfterCopyGLEntryFromGenJnlLine(VAR GLEntry : Record "G/L Entry";VAR GenJournalLine : Record "Gen. Journal Line")
+    begin
+        GLEntry."NAC.IBMNAV Sequence No." := GenJournalLine."NAC.IBMNAV Sequence No.";
+        GLEntry."NAC.IBMNAV Transaction Code" := GenJournalLine."NAC.IBMNAV Transaction Code";
+        GLEntry."NAC.IBMNAV Transaction No." := GenJournalLine."NAC.IBMNAV Transaction No.";
+    end;
+
 /// LOCAL [External] [IntegrationEvent] OnBeforeInsertGLEntryBuffer(VAR TempGLEntryBuf : TEMPORARY Record "G/L Entry";VAR GenJournalLine : Record "Gen. Journal Line")
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnBeforeInsertGLEntryBuffer', '', true, false)]
     local procedure OnBeforeInsertGLEntryBuffer(VAR TempGLEntryBuf:Record"G/L Entry"temporary;VAR GenJournalLine : Record "Gen. Journal Line")

@@ -94,10 +94,23 @@ page 50202 "NAC.IBMNAV.SetupCard"
                     IBMProcess.ProcessUploadTest();
                 end;
             }
+            action(ClearTransactionEntries)
+            {
+                Caption='DEBUG: Clear Transactions';
+                trigger OnAction();
+                var
+                    tranactionEntry:Record"NAC.IBMNAV.TransactionEntry";
+                begin
+                    tranactionEntry.deleteall(false);
+                    Message('Entries have been cleared.');
+                end;
+            }
             action(ProcessManualTest)
             {
-                Caption='Process Manual Integration Test';
+                Caption='Process Manual Integration';
                 Image=Post;
+                Promoted=true;
+                PromotedIsBig=true;
                 trigger OnAction();
                 var
                     iBMProcess:Codeunit"NAC.IBMNAV.Process";
