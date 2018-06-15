@@ -38,7 +38,7 @@ table 50204 "NAC.IBMNAV.IFBAT"
         field(35;ACCTYP;Code[10]) { Description='ACCT TYPE'; Caption='Account Type'; } /// GL, CUSTOMER, VENDOR
         field(36;ACCTNO;Code[20]) { Description='ACCT NO'; Caption='Account No.'; }
         field(37;TRND;Text[50]) { Description='TRN DESCRIPTION'; Caption='Description'; }
-        field(38;EXTDOC;Code[20]) { Description='EXTERNAL DOCUMENT NO'; Caption='External Document No.'; }
+        field(38;EXTDOC;Code[35]) { Description='EXTERNAL DOCUMENT NO'; Caption='External Document No.'; }
 
         field(40;CURR;Code[3]) { Description='CURRENCY CODE'; Caption='Currency Code'; } /// ZAR, AUD, EUR
         field(41;XRATE;Decimal) { Description='CURRENCY FACTOR'; Caption='Currency Factory'; } 

@@ -4,7 +4,7 @@
 table 50205 "NAC.IBMNAV.IFRET"
 {
     //DataClassification = CustomerContent;
-    DataPerCompany = FALSE;
+    DataPerCompany = true;
     Description = 'Represents return information sent back to IBM';
     
     fields
