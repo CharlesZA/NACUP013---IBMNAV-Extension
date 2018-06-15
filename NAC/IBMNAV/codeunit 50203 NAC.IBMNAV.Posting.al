@@ -92,6 +92,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         dataChecksPassed:Boolean; 
         dataCheckFailDescription:Text[128]; 
         genJnlLine:Record"Gen. Journal Line";
+        reasonCode:Code[10];
     begin
 
         /// Ensure the batch is clear
@@ -104,6 +105,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         if genJnlLine.IsEmpty() = false then genJnlLine.DeleteAll(true);
 
         dataChecksPassed := true;
+        reasonCode := 'SUCCESS';
         tempIFBAT.FindSet();
         repeat
             
@@ -118,12 +120,14 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                         /// This is a fail
                         dataCheckFailDescription := 'TRANSACTION TYPE IS BLOCKED IN NAV';
                         dataChecksPassed := false;
+                        reasonCode := 'FAIL';
                     end;
                 end
                 else begin
                     /// This is a fail
                     dataCheckFailDescription := 'TRANSACTION TYPE IS NOT SETUP IN NAV';
                     dataChecksPassed := false;
+                    reasonCode := 'FAIL';
                 end;
 
                 /// check if transaction has already been posted. 
@@ -131,6 +135,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                     if transactionEntry.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ) then begin
                         dataChecksPassed := false;
                         dataCheckFailDescription := 'TRANSACTION HAS ALREADY BEEN POSTED';
+                        reasonCode := 'SUCCESS';
                     end;
                 end;
 
@@ -140,6 +145,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                     if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
                         if GetLastErrorText() <> '' then begin
                             dataChecksPassed := false;
+                            reasonCode := 'FAIL';
                             dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()),1,128); /// Shortened to exclude carrage return
                             ClearLastError();
                         end;
@@ -148,7 +154,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                 
 
                 if dataChecksPassed then begin
-                    tempIFRET.RESCD := 'SUCCESS';
+                    tempIFRET.RESCD := reasonCode;
                     tempIFRET.RESDS := '';
                     tempIFRET.DATE := Today();
                     tempIFRET.TIME := Time();
@@ -170,15 +176,18 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                     commit;
                     IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch",genJnlLine) then begin
                         WriteTransactionHistoryInformation(tempIFBAT);
+                        Commit; /// Ensures that duplicates cannot be processed
                     end
                     else begin
                         dataChecksPassed := false;
+                        reasonCode := 'FAIL';
                         dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()),1,128);
                         ClearLastError();
                     end;
             end
             else begin
                 dataChecksPassed := false;
+                reasonCode := 'FAIL';
                 dataCheckFailDescription := 'POST FAILED: NO JOURNALS CREATED';
             end;
         end;
@@ -186,7 +195,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         if dataChecksPassed = false then begin 
             tempIFRET.RESDS := dataCheckFailDescription;
             tempIFRET.Modify(false);
-            tempIFRET.ModifyAll(RESCD,'FAIL',false);
+            tempIFRET.ModifyAll(RESCD,reasonCode,false);
             tempIFRET.ModifyAll(DATE,today(),false);
             tempIFRET.ModifyAll(TIME,Time(),false);
         end;       
