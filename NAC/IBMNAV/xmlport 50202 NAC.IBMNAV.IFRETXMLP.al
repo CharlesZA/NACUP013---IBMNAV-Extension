@@ -31,7 +31,14 @@ xmlport 50202 "NAC.IBMNAV.IFRETXMLP"
                     end;
                 }
                 // fieldelement(IRDATE;IFRET.DATE) {}
-                fieldelement(IRTIME;IFRET.TIME) {}
+                textelement(textResponseTime)
+                {
+                    trigger OnBeforePassVariable()
+                    begin
+                        textResponseTime := format(IFRET.TIME,8,'<Hours24,2><Filler Character,0>:<Minutes,2>:<Seconds,2>');
+                    end;
+                }
+                // fieldelement(IRTIME;IFRET.TIME) {}
             }
         }
     }
