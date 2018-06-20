@@ -63,17 +63,48 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
 
 
         /// Dimensions
-        if rec.DIM1 <> '' then if gLSetup."Shortcut Dimension 1 Code" <> '' then  genJnlLine.validate("Shortcut Dimension 1 Code",rec.DIM1);
-        if rec.DIM2 <> '' then if gLSetup."Shortcut Dimension 2 Code" <> '' then  genJnlLine.validate("Shortcut Dimension 2 Code",rec.DIM2);
+        if rec.DIM1 <> '' then if gLSetup."Shortcut Dimension 1 Code" <> '' then begin
+            OnBeforeValidateDimCode(1,rec.DIM1);  
+            genJnlLine.validate("Shortcut Dimension 1 Code",rec.DIM1);
+        end;
 
-        if rec.DIM3 <> '' then if gLSetup."Shortcut Dimension 3 Code" <> '' then genJnlLine.ValidateShortcutDimCode(3,rec.DIM3);
-        if rec.DIM4 <> '' then if gLSetup."Shortcut Dimension 4 Code" <> '' then genJnlLine.ValidateShortcutDimCode(4,rec.DIM3);
-        if rec.DIM5 <> '' then if gLSetup."Shortcut Dimension 5 Code" <> '' then genJnlLine.ValidateShortcutDimCode(5,rec.DIM3);
-        if rec.DIM6 <> '' then if gLSetup."Shortcut Dimension 6 Code" <> '' then genJnlLine.ValidateShortcutDimCode(6,rec.DIM3);
-        if rec.DIM7 <> '' then if gLSetup."Shortcut Dimension 7 Code" <> '' then genJnlLine.ValidateShortcutDimCode(7,rec.DIM3);
-        if rec.DIM8 <> '' then if gLSetup."Shortcut Dimension 8 Code" <> '' then genJnlLine.ValidateShortcutDimCode(8,rec.DIM3);
+        if rec.DIM2 <> '' then if gLSetup."Shortcut Dimension 2 Code" <> '' then begin
+            OnBeforeValidateDimCode(2,rec.DIM2);
+            genJnlLine.validate("Shortcut Dimension 2 Code",rec.DIM2);
+        end;
+
+        if rec.DIM3 <> '' then if gLSetup."Shortcut Dimension 3 Code" <> '' then  begin
+            OnBeforeValidateDimCode(3,rec.DIM3);
+            genJnlLine.ValidateShortcutDimCode(3,rec.DIM3);
+        end;
+        if rec.DIM4 <> '' then if gLSetup."Shortcut Dimension 4 Code" <> '' then begin
+            OnBeforeValidateDimCode(4,rec.DIM4);
+            genJnlLine.ValidateShortcutDimCode(4,rec.DIM3);
+        end;
+        if rec.DIM5 <> '' then if gLSetup."Shortcut Dimension 5 Code" <> '' then begin
+            OnBeforeValidateDimCode(5,rec.DIM5);
+            genJnlLine.ValidateShortcutDimCode(5,rec.DIM3);
+        end;
+        if rec.DIM6 <> '' then if gLSetup."Shortcut Dimension 6 Code" <> '' then begin
+            OnBeforeValidateDimCode(6,rec.DIM6);
+            genJnlLine.ValidateShortcutDimCode(6,rec.DIM3);
+        end;
+        if rec.DIM7 <> '' then if gLSetup."Shortcut Dimension 7 Code" <> '' then begin
+            OnBeforeValidateDimCode(7,rec.DIM7);
+            genJnlLine.ValidateShortcutDimCode(7,rec.DIM3);
+        end;
+        if rec.DIM8 <> '' then if gLSetup."Shortcut Dimension 8 Code" <> '' then begin
+            OnBeforeValidateDimCode(8, rec.DIM8);
+            genJnlLine.ValidateShortcutDimCode(8,rec.DIM3);
+        end;
 
 
         genJnlLine.Modify();
+    end;
+
+    /// Created event to take action on missing dimension values
+    [IntegrationEvent(false,false)]
+    procedure OnBeforeValidateDimCode(fieldNum:Integer;valueCode:Code[20]);
+    begin
     end;
 }
