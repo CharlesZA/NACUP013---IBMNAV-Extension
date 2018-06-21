@@ -35,6 +35,9 @@ codeunit 50219 "NAC.IBMNAV.Install"
         // Some possible usages:
         // - Service callback/telemetry indicating that extension was install
         // - Initial data setup for use
+
+        SetupDefaultRolesAndPermissions();
+
         if company.FindFirst() then begin
             repeat
 
@@ -77,6 +80,14 @@ codeunit 50219 "NAC.IBMNAV.Install"
         // - Service callback/telemetry indicating that extension was reinstalled
         // - Data 'patchup' work, for example, detecting if new 'base' records have been changed while you have been working 'offline'.
         // - Setup 'welcome back' messaging for next user access.
+    end;
+
+    local procedure SetupDefaultRolesAndPermissions()
+    var
+        userGroup:Record"User Group";
+        userGroupPermissionSet:Record"User Group Permission Set";
+    begin
+
     end;
    
 }
