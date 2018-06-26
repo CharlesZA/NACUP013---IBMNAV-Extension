@@ -61,6 +61,7 @@ table 50203 "NAC.IBMNAV.TransactionType"
         AddSetupDefault('ORDFGT','Order: Freight charges',false,companyName);
         AddSetupDefault('ORDINS','Order: Marine Insurance',false,companyName);
         AddSetupDefault('ROPI','RO Invoice',false,companyName);
+        AddSetupDefault('MROOUTW','MRO Outwork',false,companyName);
     end;
 
     local procedure AddSetupDefault(defaultCode:Code[10];defaultDescription:Text[50];blocked:Boolean;companyName:Text[30]);
