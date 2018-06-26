@@ -41,7 +41,7 @@ table 50204 "NAC.IBMNAV.IFBAT"
         field(38;EXTDOC;Code[35]) { Description='EXTERNAL DOCUMENT NO'; Caption='External Document No.'; }
 
         field(40;CURR;Code[3]) { Description='CURRENCY CODE'; Caption='Currency Code'; } /// ZAR, AUD, EUR
-        field(41;XRATE;Decimal) { Description='CURRENCY FACTOR'; Caption='Currency Factory'; } 
+        field(41;XRATE;Decimal) { Description='CURRENCY FACTOR'; Caption='Currency Factor'; } 
         field(42;VALUE;Decimal) { Description='TRN VALUE'; Caption='Amount'; } /// AMOUNT
 
         field(45;VATGRP;Code[10]) { Description='VAT GROUP'; Caption='VAT Product Posting Group'; } /// VAT PRODUCT POSTING GROUP

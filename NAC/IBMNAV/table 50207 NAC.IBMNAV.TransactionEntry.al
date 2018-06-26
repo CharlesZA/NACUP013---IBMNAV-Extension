@@ -41,7 +41,7 @@ table 50207 "NAC.IBMNAV.TransactionEntry"
         field(38;EXTDOC;Code[35]) { Description='EXTERNAL DOCUMENT NO'; Caption='External Document No.'; Editable=false; }
 
         field(40;CURR;Code[3]) { Description='CURRENCY CODE'; Caption='Currency Code'; Editable=false; } /// ZAR, AUD, EUR
-        field(41;XRATE;Decimal) { Description='CURRENCY FACTOR'; Caption='Currency Factory'; Editable=false; } 
+        field(41;XRATE;Decimal) { Description='CURRENCY FACTOR'; Caption='Currency Factor'; Editable=false; } 
         field(42;VALUE;Decimal) { Description='TRN VALUE'; Caption='Amount'; Editable=false; } /// AMOUNT
 
         field(45;VATGRP;Code[10]) { Description='VAT GROUP'; Caption='VAT Product Posting Group'; Editable=false; } /// VAT PRODUCT POSTING GROUP
