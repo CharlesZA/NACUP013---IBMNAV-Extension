@@ -44,7 +44,10 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
 
         genJnlLine.Validate("Account No.",rec.ACCTNO);
 
-        genJnlLine.Validate("External Document No.",rec.EXTDOC);
+        IF genJnlLine."Document Type" in [genJnlLine."Document Type"::"Credit Memo", genJnlLine."Document Type"::Invoice] then begin
+            genJnlLine.Validate("External Document No.",rec.DOCNO);
+        end;
+
         genJnlLine.Validate(Description,rec.TRND);
 
         if rec.CURR <> gLSetup."LCY Code" then begin
