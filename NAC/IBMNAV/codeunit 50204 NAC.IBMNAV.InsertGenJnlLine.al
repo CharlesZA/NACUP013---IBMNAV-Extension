@@ -57,8 +57,18 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
 
         genJnlLine.Validate(Amount,rec.VALUE);
 
-        /// The VAT Product Posting Group       ----    May need to do something special here
-        genJnlLine.Validate("VAT Prod. Posting Group",rec.VATGRP);
+        /// The VAT Product Posting Group       ----    
+        IF genJnlLine."Document Type" in [genJnlLine."Document Type"::"Credit Memo", genJnlLine."Document Type"::Invoice] then begin
+            genJnlLine.Validate("VAT Prod. Posting Group",rec.VATGRP);
+        end
+        else begin
+            // Ensure VAT and Business are blank for plane general journal
+            genJnlLine."Gen. Posting Type" := genJnlLine."Gen. Posting Type"::" ";
+            genJnlLine."Gen. Bus. Posting Group" := '';
+            genJnlLine."Gen. Prod. Posting Group" := '';
+            genJnlLine."VAT Bus. Posting Group" := '';
+            genJnlLine."VAT Prod. Posting Group" := '';
+        end;
 
 
         genJnlLine.Modify();
