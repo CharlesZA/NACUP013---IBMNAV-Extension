@@ -122,12 +122,12 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                         dataChecksPassed := false;
                         reasonCode := 'FAIL';
                     end;
-                end
-                else begin
-                    /// This is a fail
-                    dataCheckFailDescription := 'TRANSACTION TYPE IS NOT SETUP IN NAV';
-                    dataChecksPassed := false;
-                    reasonCode := 'FAIL';
+//                end
+//                else begin
+//                    /// This is a fail
+//                    dataCheckFailDescription := 'TRANSACTION TYPE IS NOT SETUP IN NAV';
+//                    dataChecksPassed := false;
+//                    reasonCode := 'FAIL';
                 end;
 
                 /// check if transaction has already been posted. 
