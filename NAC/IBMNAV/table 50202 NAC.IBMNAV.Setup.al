@@ -58,6 +58,11 @@ table 50202 "NAC.IBMNAV.Setup"
         //     Caption='Import Mode';
         //     Description='This is used for debugging purposes.';
         // }
+
+        field(200; Locked; Boolean)
+        {
+            Caption='Locked';
+        }
     }
 
     keys
@@ -67,6 +72,11 @@ table 50202 "NAC.IBMNAV.Setup"
             Clustered = true;
         }
     }
+
+    trigger OnModify()
+    begin
+        TestField(Locked,false);
+    end;
 
     procedure SetupDefaults();
     begin

@@ -123,6 +123,28 @@ page 50202 "NAC.IBMNAV.SetupCard"
                     iBMProcess.Code();
                 end;
             }
+            action(LockRecord)
+            {
+                Caption='Lock Record';
+                Image=Lock;
+                trigger OnAction()
+                begin
+                    Rec.Locked := true;
+                    Modify(false);
+                    CurrPage.Editable(rec.Locked);
+                end;
+            }
+            action(UnLockRecord)
+            {
+                Caption='Unlock Record';
+                Image=ReOpen;
+                trigger OnAction()
+                begin
+                    Rec.Locked := false;
+                    Modify(false);
+                    CurrPage.Editable(rec.Locked);
+                end;
+            }
         }
     }
 
@@ -135,5 +157,7 @@ page 50202 "NAC.IBMNAV.SetupCard"
             Rec.SetupDefaults();
             Rec.Insert(FALSE);
         end;
+
+        CurrPage.Editable(rec.Locked);
     end;    
 }
