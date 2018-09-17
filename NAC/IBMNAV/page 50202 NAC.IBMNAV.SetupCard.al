@@ -131,7 +131,6 @@ page 50202 "NAC.IBMNAV.SetupCard"
                 begin
                     Rec.Locked := true;
                     Modify(false);
-                    CurrPage.Editable(rec.Locked);
                 end;
             }
             action(UnLockRecord)
@@ -142,7 +141,6 @@ page 50202 "NAC.IBMNAV.SetupCard"
                 begin
                     Rec.Locked := false;
                     Modify(false);
-                    CurrPage.Editable(rec.Locked);
                 end;
             }
         }
@@ -158,6 +156,5 @@ page 50202 "NAC.IBMNAV.SetupCard"
             Rec.Insert(FALSE);
         end;
 
-        CurrPage.Editable(rec.Locked);
     end;    
 }
