@@ -56,6 +56,7 @@ page 50202 "NAC.IBMNAV.SetupCard"
             {
                 Caption='Process Download Test';
                 Image=TestFile;
+                Visible=false;
                 trigger OnAction();
                 var
                     IBMProcess:Codeunit"NAC.IBMNAV.Process";
@@ -66,6 +67,7 @@ page 50202 "NAC.IBMNAV.SetupCard"
             action(ProcessImportIFBAT)
             {
                 Caption='Test importing batch file';
+                Visible=false;
                 trigger OnAction();
                 var
                     IBMProcess:Codeunit"NAC.IBMNAV.Process";
@@ -76,6 +78,7 @@ page 50202 "NAC.IBMNAV.SetupCard"
             action(ProcessExportIFRET)
             {
                 Caption='Test exporting return file';
+                Visible=false;
                 trigger OnAction();
                 var
                     IBMProcess:Codeunit"NAC.IBMNAV.Process";
@@ -87,6 +90,7 @@ page 50202 "NAC.IBMNAV.SetupCard"
             {
                 Caption='Process Upload Test';
                 Image=TestFile;
+                Visible=false;
                 trigger OnAction();
                 var 
                     IBMProcess:Codeunit"NAC.IBMNAV.Process";
@@ -97,6 +101,7 @@ page 50202 "NAC.IBMNAV.SetupCard"
             action(ClearTransactionEntries)
             {
                 Caption='DEBUG: Clear Transactions';
+                Visible=false;
                 trigger OnAction();
                 var
                     tranactionEntry:Record"NAC.IBMNAV.TransactionEntry";
