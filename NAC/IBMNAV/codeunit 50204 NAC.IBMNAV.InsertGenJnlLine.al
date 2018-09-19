@@ -55,7 +55,9 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
 
         if rec.CURR <> gLSetup."LCY Code" then begin
             genJnlLine.Validate("Currency Code",rec.CURR);
-            genJnlLine.Validate("Currency Factor",rec.XRATE);
+            if (rec.XRATE <> 0) then begin
+                genJnlLine.Validate("Currency Factor",1 / rec.XRATE);
+            end;
         end;
 
         genJnlLine.Validate(Amount,rec.VALUE);
