@@ -66,6 +66,7 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
         IF genJnlLine."Document Type" in [genJnlLine."Document Type"::"Credit Memo", genJnlLine."Document Type"::Invoice] then begin
             if genJnlLine."Account Type" = genJnlLine."Account Type"::"G/L Account" then begin
                 genJnlLine.Validate("Gen. Bus. Posting Group",GetBusinessPostingGroup());
+                genJnlLine.Validate("VAT Bus. Posting Group",GetVATBusinessPostingGroup());
             end;
             genJnlLine.Validate("VAT Prod. Posting Group",rec.VATGRP);
         end
@@ -155,6 +156,24 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
         _genJnlLine.FindFirst();
         exit(_genJnlLine."Gen. Bus. Posting Group");
     end;
+
+        /// Created function to return the correct VAT business posting group for invoices and credit memos
+    local procedure GetVATBusinessPostingGroup() : Code[20]
+    var
+        _genJnlLine : Record "Gen. Journal Line";
+    begin
+        iBMNAVSetup.get;
+        _genJnlLine.SetRange("Journal Template Name",iBMNAVSetup.GenJnlTemplate);
+        _genJnlLine.SetRange("Journal Batch Name",iBMNAVSetup.GenJnlBatchCode);
+        _genJnlLine.SetFilter("Document Type",'%1|%2',_genJnlLine."Document Type"::Invoice,_genJnlLine."Document Type"::"Credit Memo");
+        _genJnlLine.SetFilter("Account Type",'%1|%2',_genJnlLine."Account Type"::Customer,_genJnlLine."Account Type"::Vendor);
+
+        if _genJnlLine.IsEmpty() then exit('');
+
+        _genJnlLine.FindFirst();
+        exit(_genJnlLine."VAT Bus. Posting Group");
+    end;
+
 
     /// Update Sales/Purchase(LCY) on Customer/Vendor journal line
     local procedure UpdateSalesPurchLCY(VATAmount:Decimal)
