@@ -17,7 +17,7 @@ codeunit 50208 "NAC.IBMNAV.ThridSync"
     begin
         OpenDialog();
 
-        // 0. Check setups.
+        VerifyIBMNAVSetup();
 
         // 1. Collection and populate table IFXRATE with eligable customers and vendor accross companies
 
@@ -29,6 +29,21 @@ codeunit 50208 "NAC.IBMNAV.ThridSync"
 
         CloseDialog();
     end;
+
+    /// This procedures tests setup fields
+    local procedure VerifyIBMNAVSetup()
+    begin
+        UpdateDialog('Verifying Setup Information');
+        iBMNAVSetup.GET;
+        /// Data Definitions
+        /// *ToDo: Add a check to see if these file actually exist on the server.
+        iBMNAVSetup.TestField(DataDefinitionPath);
+        iBMNAVSetup.TestField(IFXThirdDataDefinitionFileName);
+        /// Staging
+        iBMNAVSetup.TestField(DataStagingPath);
+        iBMNAVSetup.TestField(IFXThirdDataResponseFileName);
+    end;
+
 
     /// Dialog for manual processing
     local procedure OpenDialog()

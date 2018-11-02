@@ -17,7 +17,7 @@ codeunit 50207 "NAC.IBMNAV.RateSync"
     begin
         OpenDialog();
 
-        // 0. Check setups
+        VerifyIBMNAVSetup();
 
         // 1. Download Rates from IBM
 
@@ -29,6 +29,20 @@ codeunit 50207 "NAC.IBMNAV.RateSync"
 
         CloseDialog();
     end;
+
+    /// This procedures tests setup fields
+    local procedure VerifyIBMNAVSetup()
+    begin
+        UpdateDialog('Verifying Setup Information');
+        iBMNAVSetup.GET;
+        /// Data Definitions
+        /// *ToDo: Add a check to see if these file actually exist on the server.
+        iBMNAVSetup.TestField(DataDefinitionPath);
+        iBMNAVSetup.TestField(IFXRateDataDefinitionFileName);
+        /// Staging
+        iBMNAVSetup.TestField(IFXRateDataStagingFileName);
+    end;
+
 
     /// Dialog for manual processing
     local procedure OpenDialog()
