@@ -9,7 +9,8 @@ table 50213 "NAC.IBMNAV.IFXRATE"
 
     fields
     {
-        field(1; CURRENCY; code[10]) { Description = 'Currency Code'; Caption = 'Currency Code'; }
+        field(1; BASECURRENCY; code[10]) { Description = 'Base Currency Code'; Caption = 'Base Currency Code'; }
+        field(2; CURRENCY; code[10]) { Description = 'Currency Code'; Caption = 'Currency Code'; }
 
         field(10; RATE; Decimal) { Description = 'Exchange Rate'; Caption = 'Exchange Rate'; }
         field(11; UPDDATE; Date) { Description = 'Exchange Rate Starting Date'; Caption = 'Starting Date'; }
@@ -19,7 +20,7 @@ table 50213 "NAC.IBMNAV.IFXRATE"
 
     keys
     {
-        key(PK; CURRENCY)
+        key(PK; BASECURRENCY)
         {
             Clustered = true;
         }
