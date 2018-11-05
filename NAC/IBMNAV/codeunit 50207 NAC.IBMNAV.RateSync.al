@@ -18,17 +18,76 @@ codeunit 50207 "NAC.IBMNAV.RateSync"
         OpenDialog();
 
         VerifyIBMNAVSetup();
-
-        // 1. Download Rates from IBM
-
-        // 2. Import into table IFXRate
-
-        // 3. Loop through and update participating companies.
-
-        // 4. Clean and go.
+        CleanUpStagingFiles();
+        DownloadDataFromIBM();
+        PrepareNAVSendAndRecieveTables();
+        ImportDownloadedDataIntoNAV();
+        UpdateExchangeRates();
 
         CloseDialog();
     end;
+
+    local procedure UpdateExchangeRates()
+    begin
+        // 3. Loop through and update participating companies.
+    end;
+
+    local procedure ImportDownloadedDataIntoNAV()
+    var
+        iFXRATEImport: XmlPort "NAC.IBMNAV.IFXRATEXMLP";
+        txtInStream: InStream;
+        processBlob: Record "NAC.IBMNAV.ProcessBlob";
+        txtIFBATID: Code[10];
+    begin
+        UpdateDialog('Importing Downloaded IBM Data in NAV');
+        txtIFBATID := 'IFXRATE';
+        IF processBlob.Get(txtIFBATID) then processBlob.Delete(FALSE);
+        processBlob.init;
+        processBlob.PrimaryKey := txtIFBATID;
+        processBlob.Insert(false);
+
+        processBlob.ImportFromServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.IFXRateDataStagingFileName);
+        processBlob.get(txtIFBATID);
+        processBlob.CalcFields(TempBlob);
+        processBlob.TempBlob.CreateInStream(txtInStream);
+
+        iFXRATEImport.SetSource(txtInStream);
+        iFXRATEImport.Import();
+
+        processBlob.Delete(FALSE);
+    end;
+
+
+    local procedure PrepareNAVSendAndRecieveTables()
+    var
+        iFXRATE: Record "NAC.IBMNAV.IFXRATE";
+    begin
+        iFXRATE.DeleteAll(false);
+    end;
+
+
+    local procedure DownloadDataFromIBM()
+    begin
+        UpdateDialog('Downloading Data from IBM');
+        if dataTransfer.DataTransfer_Download(iBMNAVSetup.DataDefinitionPath + '\' + iBMNAVSetup.IFXRateDataDefinitionFileName) then begin
+            /// Success
+        end
+        else begin
+            /// Fail
+            ERROR('Unable to download file from IBM Server.')
+        end;
+    end;
+
+
+    /// This procedure makes sure that server staging files for this company have been removed. 
+    local procedure CleanUpStagingFiles()
+    var
+        processBlob: Record "NAC.IBMNAV.ProcessBlob";
+    begin
+        UpdateDialog('Cleaning Up Staging Files');
+        processBlob.EraseServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.IFXRateDataStagingFileName);
+    end;
+
 
     /// This procedures tests setup fields
     local procedure VerifyIBMNAVSetup()

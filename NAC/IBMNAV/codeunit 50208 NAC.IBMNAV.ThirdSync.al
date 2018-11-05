@@ -18,17 +18,67 @@ codeunit 50208 "NAC.IBMNAV.ThridSync"
         OpenDialog();
 
         VerifyIBMNAVSetup();
-
-        // 1. Collection and populate table IFXRATE with eligable customers and vendor accross companies
-
-        // 2. Export table to submit to IBM
-
-        // 3. Submit
-
-        // 4. Clean on success.
+        CleanUpStagingFiles();
+        CalculateThirds();
+        ExportUploadDataForIBM();
+        UploadDataToIBM();
 
         CloseDialog();
     end;
+
+    local procedure CalculateThirds()
+    begin
+        // 1. Collection and populate table IFXTHIRD with eligable customers and vendor accross companies
+    end;
+
+    local procedure UploadDataToIBM()
+    begin
+        UpdateDialog('Uploading Data to IBM');
+        if dataTransfer.DataTransfer_Upload(iBMNAVSetup.DataDefinitionPath + '\' + iBMNAVSetup.IFXThirdDataDefinitionFileName) then begin
+            /// Success
+        end
+        else begin
+            /// Fail
+            ERROR('Unable to Upload file to IBM Server.')
+        end;
+    end;
+
+
+    local procedure ExportUploadDataForIBM()
+    var
+        iFTHIRDExport: XmlPort "NAC.IBMNAV.IFTHIRDXMLP";
+        txtOutStream: OutStream;
+        processBlob: Record "NAC.IBMNAV.ProcessBlob";
+        txtIFRETID: Code[10];
+    begin
+        UpdateDialog('Exporting Upload Data for IBM');
+        txtIFRETID := 'IFTHIRD';
+        IF processBlob.Get(txtIFRETID) then processBlob.Delete(FALSE);
+        processBlob.init;
+        processBlob.PrimaryKey := txtIFRETID;
+        processBlob.Insert(false);
+
+        processBlob.CalcFields(TempBlob);
+        processBlob.TempBlob.CreateOutStream(txtOutStream);
+        iFTHIRDExport.SetDestination(txtOutStream);
+        iFTHIRDExport.Export();
+        processBlob.Modify(FALSE);
+        processBlob.ExportToServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.IFXThirdDataResponseFileName, true);
+
+        processBlob.get(txtIFRETID);
+        processBlob.Delete(false);
+    end;
+
+
+    /// This procedure makes sure that server staging files for this company have been removed. 
+    local procedure CleanUpStagingFiles()
+    var
+        processBlob: Record "NAC.IBMNAV.ProcessBlob";
+    begin
+        UpdateDialog('Cleaning Up Staging Files');
+        processBlob.EraseServerFile(iBMNAVSetup.DataStagingPath + '\' + iBMNAVSetup.IFXThirdDataResponseFileName);
+    end;
+
 
     /// This procedures tests setup fields
     local procedure VerifyIBMNAVSetup()
