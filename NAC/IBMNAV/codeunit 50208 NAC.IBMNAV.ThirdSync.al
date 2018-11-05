@@ -15,6 +15,11 @@ codeunit 50208 "NAC.IBMNAV.ThridSync"
 
     trigger OnRun()
     begin
+        Code();
+    end;
+
+    procedure Code()
+    begin
         OpenDialog();
 
         VerifyIBMNAVSetup();
@@ -27,8 +32,96 @@ codeunit 50208 "NAC.IBMNAV.ThridSync"
     end;
 
     local procedure CalculateThirds()
+    var
+        company: Record Company;
+        iBMSetupCompany: Record "NAC.IBMNAV.Setup";
+        iFXThird: Record "NAC.IBMNAV.IFTHIRD";
+        customer: Record Customer;
+        vendor: Record Vendor;
     begin
         // 1. Collection and populate table IFXTHIRD with eligable customers and vendor accross companies
+        if company.FindFirst() then begin
+            iBMSetupCompany.ChangeCompany(company.Name);
+            if iBMSetupCompany.get() then begin
+                if iBMSetupCompany.EnableIFXTHIRD then begin
+                    // Collect Customers and Vendors here...
+                    if iBMSetupCompany.IFXThirdCompanyID <> '' then begin
+                        if iBMSetupCompany.IFXThirdLastSyncDate <> Today() then begin
+
+                            customer.ChangeCompany(company.Name);
+                            vendor.ChangeCompany(company.Name);
+
+                            // This is dirty I know... may need to add a key to the actual table at some point.
+                            // customer.SetCurrentKey("Last Date Modified");
+                            // vendor.SetcurrentKey("Last Date Modified");
+
+                            customer.SetRange("Last Date Modified", iBMSetupCompany.IFXThirdLastSyncDate, Today());
+                            vendor.SetRange("Last Date Modified", iBMSetupCompany.IFXThirdLastSyncDate, Today());
+
+                            if customer.IsEmpty() = false then begin
+                                customer.FindFirst();
+                                repeat
+                                    iFXThird.Init();
+
+                                    iFXThird.CompanyID := iBMSetupCompany.IFXThirdCompanyID;
+                                    iFXThird.NAVNITCode := customer."No.";
+
+                                    iFXThird.CompanyAddr1 := copystr(customer.Address, 1, 36);
+                                    iFXThird.CompanyAddr2 := CopyStr(customer."Address 2", 1, 36);
+                                    iFXThird.CompanyBlocked := customer.Blocked;
+                                    iFXThird.CompanyCity := customer.City;
+                                    iFXThird.CompanyCountry := customer."Country/Region Code";
+                                    iFXThird.CompanyCurrency := customer."Currency Code";
+                                    iFXThird.CompanyName := CopyStr(customer.Name, 1, 36);
+                                    iFXThird.CompanyPaymentTerms := customer."Payment Terms Code";
+                                    iFXThird.CompanyPostCode := customer."Post Code";
+                                    iFXThird.CompanyVATNo := customer."VAT Registration No.";
+                                    iFXThird.CompanyVATPostGrp := customer."Gen. Bus. Posting Group";
+                                    iFXThird.ContactEmail := customer."E-Mail";
+                                    iFXThird.ContactName := copystr(customer.Contact, 1, 36);
+                                    iFXThird.ContactTel := copystr(customer."Phone No.", 1, 25);
+
+                                    if iFXThird.insert(false) then begin end;
+
+                                until customer.Next() = 0;
+                            end;
+
+                            if vendor.IsEmpty() = false then begin
+                                vendor.FindFirst();
+                                repeat
+                                    iFXThird.Init();
+
+                                    iFXThird.CompanyID := iBMSetupCompany.IFXThirdCompanyID;
+                                    iFXThird.NAVNITCode := vendor."No.";
+
+                                    iFXThird.CompanyAddr1 := copystr(vendor.Address, 1, 36);
+                                    iFXThird.CompanyAddr2 := CopyStr(vendor."Address 2", 1, 36);
+                                    iFXThird.CompanyBlocked := vendor.Blocked;
+                                    iFXThird.CompanyCity := vendor.City;
+                                    iFXThird.CompanyCountry := vendor."Country/Region Code";
+                                    iFXThird.CompanyCurrency := vendor."Currency Code";
+                                    iFXThird.CompanyName := CopyStr(vendor.Name, 1, 36);
+                                    iFXThird.CompanyPaymentTerms := vendor."Payment Terms Code";
+                                    iFXThird.CompanyPostCode := vendor."Post Code";
+                                    iFXThird.CompanyVATNo := vendor."VAT Registration No.";
+                                    iFXThird.CompanyVATPostGrp := vendor."Gen. Bus. Posting Group";
+                                    iFXThird.ContactEmail := vendor."E-Mail";
+                                    iFXThird.ContactName := copystr(vendor.Contact, 1, 36);
+                                    iFXThird.ContactTel := copystr(vendor."Phone No.", 1, 25);
+
+                                    if iFXThird.insert(false) then begin end;
+
+                                until vendor.Next() = 0;
+                            end;
+
+                            iBMSetupCompany.IFXThirdLastSyncDate := Today();
+                            iBMSetupCompany.Modify(false);
+
+                        end;
+                    end;
+                end;
+            end;
+        end;
     end;
 
     local procedure UploadDataToIBM()

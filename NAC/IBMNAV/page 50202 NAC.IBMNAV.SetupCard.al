@@ -48,6 +48,8 @@ page 50202 "NAC.IBMNAV.SetupCard"
                 field("Enable Third Sync"; EnableIFXTHIRD) { }
                 field("IFX Third Data Definition"; IFXThirdDataDefinitionFileName) { }
                 field("IFX Third Data Response"; IFXThirdDataResponseFileName) { }
+                field("IFX Third Last Sync Date"; IFXThirdLastSyncDate) { }
+                field("IFX Third Company ID"; IFXThirdCompanyID) { }
 
             }
 
@@ -137,6 +139,32 @@ page 50202 "NAC.IBMNAV.SetupCard"
                     iBMProcess: Codeunit "NAC.IBMNAV.Process";
                 begin
                     iBMProcess.Code();
+                end;
+            }
+            action(ProcessIFXRATE)
+            {
+                Caption = 'Process Exchange Rate Sync';
+                Image = Post;
+                Promoted = true;
+                PromotedIsBig = true;
+                trigger OnAction();
+                var
+                    iBMRateSync: Codeunit "NAC.IBMNAV.RateSync";
+                begin
+                    iBMRateSync.Code();
+                end;
+            }
+            action(ProcessIFXTHIRD)
+            {
+                Caption = 'Process THIRD Sync';
+                Image = Post;
+                Promoted = true;
+                PromotedIsBig = true;
+                trigger OnAction();
+                var
+                    iBMThirdSync: Codeunit "NAC.IBMNAV.ThridSync";
+                begin
+                    iBMThirdSync.Code();
                 end;
             }
             action(LockRecord)

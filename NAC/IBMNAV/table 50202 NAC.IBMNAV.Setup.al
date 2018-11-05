@@ -85,6 +85,19 @@ table 50202 "NAC.IBMNAV.Setup"
             Description = 'File name of the file to send to the IBM Server';
         }
 
+        field(63; IFXThirdLastSyncDate; Date)
+        {
+            Caption = 'IFXTHIRD Last Sync Date';
+            Description = 'Date the last sync happened. Used to calculate which cust/vendors to send.';
+        }
+
+        field(64; IFXThirdCompanyID; Code[3])
+        {
+            Caption = 'IFXTHIRD Company ID';
+            Description = 'Three character code for NAC or FlyAwesome';
+        }
+
+
         // field(100;ImportMode;Option)
         // {
         //     OptionMembers = "ImportToJournal:ImportAndPost";
