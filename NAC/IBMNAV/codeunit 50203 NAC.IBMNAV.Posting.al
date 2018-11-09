@@ -174,6 +174,10 @@ codeunit 50203 "NAC.IBMNAV.Posting"
             if genJnlLine.IsEmpty() = false then begin
                     genJnlLine.FindSet();
                     commit;
+                    if genJnlLine."Currency Code" <> '' then begin
+                        Codeunit.Run(Codeunit::"Adjust Gen. Journal Balance",genJnlLine);
+                        Commit();
+                    end;
                     IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch",genJnlLine) then begin
                         WriteTransactionHistoryInformation(tempIFBAT);
                         Commit; /// Ensures that duplicates cannot be processed
