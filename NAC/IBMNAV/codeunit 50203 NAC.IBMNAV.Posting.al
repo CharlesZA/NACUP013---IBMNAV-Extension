@@ -8,13 +8,13 @@
 codeunit 50203 "NAC.IBMNAV.Posting"
 {
     var
-        iBMSetup:Record"NAC.IBMNAV.Setup";
-        iFRET:Record"NAC.IBMNAV.IFRET";
-        iFBAT:Record"NAC.IBMNAV.IFBAT";
-        transactionType:Record"NAC.IBMNAV.TransactionType";
-        transactionEntry:Record"NAC.IBMNAV.TransactionEntry";
-        dialogWindow:Dialog;
-        dialogWindowOpen:Boolean;
+        iBMSetup: Record "NAC.IBMNAV.Setup";
+        iFRET: Record "NAC.IBMNAV.IFRET";
+        iFBAT: Record "NAC.IBMNAV.IFBAT";
+        transactionType: Record "NAC.IBMNAV.TransactionType";
+        transactionEntry: Record "NAC.IBMNAV.TransactionEntry";
+        dialogWindow: Dialog;
+        dialogWindowOpen: Boolean;
 
 
     trigger OnRun()
@@ -24,11 +24,11 @@ codeunit 50203 "NAC.IBMNAV.Posting"
 
     local procedure Code()
     var
-        firstLine:Boolean;
-        transactionId:Integer;
-        tempIFBAT:Record"NAC.IBMNAV.IFBAT"temporary;
-        tempIFRET:Record"NAC.IBMNAV.IFRET"temporary;
-        subString:Text;
+        firstLine: Boolean;
+        transactionId: Integer;
+        tempIFBAT: Record "NAC.IBMNAV.IFBAT" temporary;
+        tempIFRET: Record "NAC.IBMNAV.IFRET" temporary;
+        subString: Text;
     begin
         OpenDialog();
 
@@ -43,10 +43,10 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                     transactionId := iFBAT.ID;
                 end;
 
-                UpdateDialog(strsubstno(subString,iFBAT.ID,iFBAT.TID,iFBAT.SEQ));
+                UpdateDialog(strsubstno(subString, iFBAT.ID, iFBAT.TID, iFBAT.SEQ));
 
                 if transactionId <> iFBAT.ID then begin
-                    PostBatchInformation(tempIFBAT,tempIFRET);
+                    PostBatchInformation(tempIFBAT, tempIFRET);
                     tempIFBAT.DeleteAll(false);
                     tempIFRET.DeleteAll(false);
 
@@ -76,10 +76,10 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                 end;
 
                 transactionId := iFBAT.ID;
-                
+
             Until iFBAT.next = 0;
 
-            PostBatchInformation(tempIFBAT,tempIFRET);    /// Last Batch
+            PostBatchInformation(tempIFBAT, tempIFRET);    /// Last Batch
             tempIFBAT.DeleteAll(false);
             tempIFRET.DeleteAll(false);
         end;
@@ -87,20 +87,20 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         CloseDialog();
     end;
 
-    local procedure PostBatchInformation(var tempIFBAT:Record"NAC.IBMNAV.IFBAT"temporary; var tempIFRET:Record"NAC.IBMNAV.IFRET"temporary)
+    local procedure PostBatchInformation(var tempIFBAT: Record "NAC.IBMNAV.IFBAT" temporary; var tempIFRET: Record "NAC.IBMNAV.IFRET" temporary)
     var
-        dataChecksPassed:Boolean; 
-        dataCheckFailDescription:Text[128]; 
-        genJnlLine:Record"Gen. Journal Line";
-        reasonCode:Code[10];
+        dataChecksPassed: Boolean;
+        dataCheckFailDescription: Text[128];
+        genJnlLine: Record "Gen. Journal Line";
+        reasonCode: Code[10];
     begin
 
         /// Ensure the batch is clear
         iBMSetup.get;
         iBMSetup.TestField(GenJnlTemplate);
         iBMSetup.TestField(GenJnlBatchCode);
-        genJnlLine.SetRange("Journal Template Name",iBMSetup.GenJnlTemplate);
-        genJnlLine.SetRange("Journal Batch Name",iBMSetup.GenJnlBatchCode);
+        genJnlLine.SetRange("Journal Template Name", iBMSetup.GenJnlTemplate);
+        genJnlLine.SetRange("Journal Batch Name", iBMSetup.GenJnlBatchCode);
         genJnlLine.SetHideValidation(true);
         if genJnlLine.IsEmpty() = false then genJnlLine.DeleteAll(true);
 
@@ -108,11 +108,11 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         reasonCode := 'SUCCESS';
         tempIFBAT.FindSet();
         repeat
-            
+
 
             if dataChecksPassed then begin
 
-                tempIFRET.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ);
+                tempIFRET.get(tempIFBAT.ID, tempIFBAT.TID, tempIFBAT.SEQ);
 
                 /// Checking Data for Errors
                 if transactionType.get(iFBAT.TID) then begin
@@ -122,17 +122,17 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                         dataChecksPassed := false;
                         reasonCode := 'FAIL';
                     end;
-//                end
-//                else begin
-//                    /// This is a fail
-//                    dataCheckFailDescription := 'TRANSACTION TYPE IS NOT SETUP IN NAV';
-//                    dataChecksPassed := false;
-//                    reasonCode := 'FAIL';
+                    //                end
+                    //                else begin
+                    //                    /// This is a fail
+                    //                    dataCheckFailDescription := 'TRANSACTION TYPE IS NOT SETUP IN NAV';
+                    //                    dataChecksPassed := false;
+                    //                    reasonCode := 'FAIL';
                 end;
 
                 /// check if transaction has already been posted. 
                 IF dataChecksPassed then begin
-                    if transactionEntry.get(tempIFBAT.ID,tempIFBAT.TID,tempIFBAT.SEQ) then begin
+                    if transactionEntry.get(tempIFBAT.ID, tempIFBAT.TID, tempIFBAT.SEQ) then begin
                         dataChecksPassed := false;
                         dataCheckFailDescription := 'TRANSACTION HAS ALREADY BEEN POSTED';
                         reasonCode := 'SUCCESS';
@@ -142,16 +142,16 @@ codeunit 50203 "NAC.IBMNAV.Posting"
                 /// Write to general journal line here.....
                 if dataChecksPassed then begin
                     commit;  /// This is here because of the way AL handles things unlike C\AL
-                    if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine",tempIFBAT) = FALSE then begin
+                    if Codeunit.Run(Codeunit::"NAC.IBMNAV.InsertGenJnlLine", tempIFBAT) = FALSE then begin
                         if GetLastErrorText() <> '' then begin
                             dataChecksPassed := false;
                             reasonCode := 'FAIL';
-                            dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()),1,128); /// Shortened to exclude carrage return
+                            dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()), 1, 128); /// Shortened to exclude carrage return
                             ClearLastError();
                         end;
                     end;
                 end;
-                
+
 
                 if dataChecksPassed then begin
                     tempIFRET.RESCD := reasonCode;
@@ -169,25 +169,25 @@ codeunit 50203 "NAC.IBMNAV.Posting"
 
             /// Post the batch code here
             iBMSetup.get;
-            genJnlLine.SetRange("Journal Template Name",IBMSetup.GenJnlTemplate);
-            genJnlLine.SetRange("Journal Batch Name",IBMSetup.GenJnlBatchCode);
+            genJnlLine.SetRange("Journal Template Name", IBMSetup.GenJnlTemplate);
+            genJnlLine.SetRange("Journal Batch Name", IBMSetup.GenJnlBatchCode);
             if genJnlLine.IsEmpty() = false then begin
-                    genJnlLine.FindSet();
-                    commit;
-                    if genJnlLine."Currency Code" <> '' then begin
-                        Codeunit.Run(Codeunit::"Adjust Gen. Journal Balance",genJnlLine);
-                        Commit();
-                    end;
-                    IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch",genJnlLine) then begin
-                        WriteTransactionHistoryInformation(tempIFBAT);
-                        Commit; /// Ensures that duplicates cannot be processed
-                    end
-                    else begin
-                        dataChecksPassed := false;
-                        reasonCode := 'FAIL';
-                        dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()),1,128);
-                        ClearLastError();
-                    end;
+                genJnlLine.FindSet();
+                commit;
+                if genJnlLine."Currency Code" <> '' then begin
+                    Codeunit.Run(Codeunit::"Adjust Gen. Journal Balance", genJnlLine);
+                    Commit();
+                end;
+                IF Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch", genJnlLine) then begin
+                    WriteTransactionHistoryInformation(tempIFBAT);
+                    Commit; /// Ensures that duplicates cannot be processed
+                end
+                else begin
+                    dataChecksPassed := false;
+                    reasonCode := 'FAIL';
+                    dataCheckFailDescription := CopyStr(RemoveBadChars(GetLastErrorText()), 1, 128);
+                    ClearLastError();
+                end;
             end
             else begin
                 dataChecksPassed := false;
@@ -196,29 +196,29 @@ codeunit 50203 "NAC.IBMNAV.Posting"
             end;
         end;
 
-        if dataChecksPassed = false then begin 
+        if dataChecksPassed = false then begin
             tempIFRET.RESDS := dataCheckFailDescription;
             tempIFRET.Modify(false);
-            tempIFRET.ModifyAll(RESCD,reasonCode,false);
-            tempIFRET.ModifyAll(DATE,today(),false);
-            tempIFRET.ModifyAll(TIME,Time(),false);
-        end;       
+            tempIFRET.ModifyAll(RESCD, reasonCode, false);
+            tempIFRET.ModifyAll(DATE, today(), false);
+            tempIFRET.ModifyAll(TIME, Time(), false);
+        end;
 
         WriteFinalResponseInformation(tempIFRET);
     end;
 
     /// This function removes TAB, LF and CR from text. ie ErrorMessages
-    local procedure RemoveBadChars(textWithBadChars:Text):Text
+    local procedure RemoveBadChars(textWithBadChars: Text): Text
     var
-        ch:text[3];
+        ch: text[3];
     begin
         ch[1] := 9; /// TAB
         ch[2] := 10; /// LF
         ch[3] := 13; /// CR
-        Exit(DelChr(textWithBadChars,'=',ch));
-    end;   
+        Exit(DelChr(textWithBadChars, '=', ch));
+    end;
 
-    local procedure WriteTransactionHistoryInformation(var tempIFBAT:Record"NAC.IBMNAV.IFBAT"temporary)
+    local procedure WriteTransactionHistoryInformation(var tempIFBAT: Record "NAC.IBMNAV.IFBAT" temporary)
     begin
         if tempIFBAT.IsEmpty() = false then begin
             tempIFBAT.FindSet();
@@ -230,7 +230,7 @@ codeunit 50203 "NAC.IBMNAV.Posting"
         end;
     end;
 
-    local procedure WriteFinalResponseInformation(var tempIFRET:Record"NAC.IBMNAV.IFRET"temporary)
+    local procedure WriteFinalResponseInformation(var tempIFRET: Record "NAC.IBMNAV.IFRET" temporary)
     begin
         if tempIFRET.IsEmpty() = false then begin
             tempIFRET.FindSet();
@@ -252,14 +252,16 @@ codeunit 50203 "NAC.IBMNAV.Posting"
             end;
         end;
     end;
-    local procedure UpdateDialog(progressText:Text[50])
+
+    local procedure UpdateDialog(progressText: Text[50])
     begin
         if GuiAllowed() then begin
             if dialogWindowOpen then begin
-                dialogWindow.Update(1,progressText);
+                dialogWindow.Update(1, progressText);
             end;
         end;
     end;
+
     local procedure CloseDialog()
     begin
         if GuiAllowed() then begin
