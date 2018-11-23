@@ -10,7 +10,7 @@
             "serverInstance": "NAVTEST",
             "authentication": "Windows",
             "startupObjectId": 50202,
-            "schemaUpdateMode": "Synchronize"         
+            "schemaUpdateMode": "Synchronize"       
         }
     ]
 }

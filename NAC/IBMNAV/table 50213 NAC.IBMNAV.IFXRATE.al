@@ -20,7 +20,7 @@ table 50213 "NAC.IBMNAV.IFXRATE"
 
     keys
     {
-        key(PK; BASECURRENCY)
+        key(PK; BASECURRENCY, CURRENCY, UPDDATE)
         {
             Clustered = true;
         }

@@ -24,8 +24,20 @@ xmlport 50205 "NAC.IBMNAV.IFXRATEXMLP"
                 fieldelement(RATE; NACIBMNAVIFXRATE."RATE")
                 {
                 }
-                fieldelement(UPDDATE; NACIBMNAVIFXRATE."UPDDATE")
+                textelement(textUPDDATE)
                 {
+                    trigger OnAfterAssignVariable()
+                    var
+                        day: Integer;
+                        month: Integer;
+                        year: Integer;
+                    begin
+                        Evaluate(day, CopyStr(textUPDDATE, 7, 2));
+                        Evaluate(month, CopyStr(textUPDDATE, 4, 2));
+                        Evaluate(year, CopyStr(textUPDDATE, 1, 2));
+                        year += 2000;
+                        NACIBMNAVIFXRATE.UPDDATE := DMY2Date(day, month, year);
+                    end;
                 }
                 fieldelement(UPDTIME; NACIBMNAVIFXRATE."UPDTIME")
                 {
