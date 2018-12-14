@@ -68,6 +68,12 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
         /// The VAT Product Posting Group       ----    
         IF genJnlLine."Document Type" in [genJnlLine."Document Type"::"Credit Memo", genJnlLine."Document Type"::Invoice] then begin
             if genJnlLine."Account Type" = genJnlLine."Account Type"::"G/L Account" then begin
+                if IsThisASalesTransaction() then begin
+                    genJnlLine.Validate("Gen. Posting Type", genJnlLine."Gen. Posting Type"::Sale);
+                end
+                else begin
+                    genJnlLine.Validate("Gen. Posting Type", genJnlLine."Gen. Posting Type"::Purchase);
+                end;
                 genJnlLine.Validate("Gen. Bus. Posting Group", GetBusinessPostingGroup());
                 genJnlLine.Validate("VAT Bus. Posting Group", GetVATBusinessPostingGroup());
             end;
@@ -141,6 +147,29 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
             end;
         end
 
+    end;
+
+    /// Created function to determine sales or purchase
+    local procedure IsThisASalesTransaction(): Boolean
+    var
+        _genJnlLine: Record "Gen. Journal Line";
+    begin
+        iBMNAVSetup.get;
+        _genJnlLine.SetRange("Journal Template Name", iBMNAVSetup.GenJnlTemplate);
+        _genJnlLine.SetRange("Journal Batch Name", iBMNAVSetup.GenJnlBatchCode);
+        _genJnlLine.SetFilter("Document Type", '%1|%2', _genJnlLine."Document Type"::Invoice, _genJnlLine."Document Type"::"Credit Memo");
+        _genJnlLine.SetFilter("Account Type", '%1|%2', _genJnlLine."Account Type"::Customer, _genJnlLine."Account Type"::Vendor);
+
+        if _genJnlLine.IsEmpty() then exit(false);
+
+        _genJnlLine.FindFirst();
+        // Get the info from the customer/vendor
+        if _genJnlLine."Account Type" = _genJnlLine."Account Type"::Customer then begin
+            exit(true);
+        end;
+        if _genJnlLine."Account Type" = _genJnlLine."Account Type"::Vendor then begin
+            exit(false);
+        end;
     end;
 
     /// Created function to return the correct business posting group for invoices and credit memos
