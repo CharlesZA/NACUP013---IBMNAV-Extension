@@ -45,33 +45,35 @@ codeunit 50207 "NAC.IBMNAV.RateSync"
         if iFXRate.IsEmpty() then exit;
 
         if company.FindFirst() then begin
-            iBMSetupCompany.ChangeCompany(company.Name);
-            if iBMSetupCompany.get() then begin
-                if iBMSetupCompany.EnableIFXRATE then begin
-                    // Update exchange rates here
-                    gLSetup.ChangeCompany(company.Name);
-                    currencyExchangeRate.ChangeCompany(company.Name);
-                    gLSetup.get;
+            repeat
+                iBMSetupCompany.ChangeCompany(company.Name);
+                if iBMSetupCompany.get() then begin
+                    if iBMSetupCompany.EnableIFXRATE then begin
+                        // Update exchange rates here
+                        gLSetup.ChangeCompany(company.Name);
+                        currencyExchangeRate.ChangeCompany(company.Name);
+                        gLSetup.get;
 
-                    iFXRate.FindFirst();
-                    repeat
-                        if iFXRate.BASECURRENCY = gLSetup."LCY Code" then begin
-                            currencyExchangeRate.SetRange("Currency Code", iFXRate.CURRENCY);
-                            currencyExchangeRate.SetRange("Starting Date", iFXRate.UPDDATE);
-                            if currencyExchangeRate.IsEmpty() then begin  // Can only create a record for posting consistancy.
-                                currencyExchangeRate.Init();
-                                currencyExchangeRate."Currency Code" := iFXRate.CURRENCY;
-                                currencyExchangeRate."Starting Date" := iFXRate.UPDDATE;
-                                currencyExchangeRate."Exchange Rate Amount" := 1;
-                                currencyExchangeRate."Adjustment Exch. Rate Amount" := 1;
-                                currencyExchangeRate."Relational Exch. Rate Amount" := iFXRate.RATE;
-                                currencyExchangeRate."Relational Adjmt Exch Rate Amt" := iFXRate.RATE;
-                                if currencyExchangeRate.Insert(false) then begin end;
+                        iFXRate.FindFirst();
+                        repeat
+                            if iFXRate.BASECURRENCY = gLSetup."LCY Code" then begin
+                                currencyExchangeRate.SetRange("Currency Code", iFXRate.CURRENCY);
+                                currencyExchangeRate.SetRange("Starting Date", iFXRate.UPDDATE);
+                                if currencyExchangeRate.IsEmpty() then begin  // Can only create a record for posting consistancy.
+                                    currencyExchangeRate.Init();
+                                    currencyExchangeRate."Currency Code" := iFXRate.CURRENCY;
+                                    currencyExchangeRate."Starting Date" := iFXRate.UPDDATE;
+                                    currencyExchangeRate."Exchange Rate Amount" := 1;
+                                    currencyExchangeRate."Adjustment Exch. Rate Amount" := 1;
+                                    currencyExchangeRate."Relational Exch. Rate Amount" := iFXRate.RATE;
+                                    currencyExchangeRate."Relational Adjmt Exch Rate Amt" := iFXRate.RATE;
+                                    if currencyExchangeRate.Insert(false) then begin end;
+                                end;
                             end;
-                        end;
-                    until iFXRate.next = 0;
+                        until iFXRate.next = 0;
+                    end;
                 end;
-            end;
+            until company.next() = 0;
         end;
 
     end;
