@@ -40,6 +40,7 @@ codeunit 50208 "NAC.IBMNAV.ThridSync"
         vendor: Record Vendor;
     begin
         // 1. Collection and populate table IFXTHIRD with eligable customers and vendor accross companies
+        iFXThird.DeleteAll(FALSE);
         if company.FindFirst() then begin
             repeat
                 iBMSetupCompany.ChangeCompany(company.Name);
