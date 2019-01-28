@@ -75,7 +75,7 @@ codeunit 50208 "NAC.IBMNAV.ThridSync"
                                         iFXThird.CompanyCurrency := customer."Currency Code";
                                         iFXThird.CompanyName := CopyStr(customer.Name, 1, 36);
                                         iFXThird.CompanyPaymentTerms := customer."Payment Terms Code";
-                                        iFXThird.CompanyPostCode := customer."Post Code";
+                                        iFXThird.CompanyPostCode := copystr(customer."Post Code",1,10);
                                         iFXThird.CompanyVATNo := customer."VAT Registration No.";
                                         iFXThird.CompanyVATPostGrp := customer."Gen. Bus. Posting Group";
                                         iFXThird.ContactEmail := customer."E-Mail";
@@ -103,7 +103,7 @@ codeunit 50208 "NAC.IBMNAV.ThridSync"
                                         iFXThird.CompanyCurrency := vendor."Currency Code";
                                         iFXThird.CompanyName := CopyStr(vendor.Name, 1, 36);
                                         iFXThird.CompanyPaymentTerms := vendor."Payment Terms Code";
-                                        iFXThird.CompanyPostCode := vendor."Post Code";
+                                        iFXThird.CompanyPostCode := copystr(vendor."Post Code",1,10);
                                         iFXThird.CompanyVATNo := vendor."VAT Registration No.";
                                         iFXThird.CompanyVATPostGrp := vendor."Gen. Bus. Posting Group";
                                         iFXThird.ContactEmail := vendor."E-Mail";
