@@ -5,7 +5,7 @@ table 50212 "NAC.IBMNAV.IFTHIRD"
 {
     //DataClassification = CustomerContent;
     DataPerCompany = false;
-    Description = 'This table represents the data batch file received from IBM after it has been imported';
+    Description = 'This table represents the data batch file to be exported';
 
     fields
     {
