@@ -97,6 +97,40 @@ table 50202 "NAC.IBMNAV.Setup"
             Description = 'Three character code for NAC or FlyAwesome';
         }
 
+        field(65; IFPMNTLastSyncDate; Date)
+        {
+            Caption = 'IFPMNT Last Sync Date';
+            Description = 'Date the last sync happened';
+        }
+
+        field(66; IFPMNTCompanyID; Code[3])
+        {
+            Caption = 'IFPMNT Company ID';
+            Description = 'Three character code for NAC or FlyAwesome';
+        }
+        field(67; EnableIFPMNT; Boolean)
+        {
+            Caption = 'Enable Payment Integration';
+            Description = 'Let the IBM.NAV Integration know that this company integrates';
+        }
+        field(68; IFPMNTDataDefinitionFileName; Text[250])
+        {
+            Caption = 'IFPMNT Data Def. Response File Name';
+            Description = 'These is typically a file with a dttx extension.';
+        }
+        field(69; IFPMNTDataResponseFileName; Text[250])
+        {
+            Caption = 'IFPMNT Data Response File Name';
+            Description = 'File name of the file to send to the IBM Server';
+        }
+        field(70; IFPMNTLastDetailEntryNo; Integer)
+        {
+            Caption = 'IFPMNT Last Detailed Entry No.';
+            Description = 'Last Detailed Ledger entry used the last time the sync was run.';
+        }
+
+
+
 
         // field(100;ImportMode;Option)
         // {

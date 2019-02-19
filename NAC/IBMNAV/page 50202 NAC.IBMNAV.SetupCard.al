@@ -52,6 +52,15 @@ page 50202 "NAC.IBMNAV.SetupCard"
                 field("IFX Third Company ID"; IFXThirdCompanyID) { }
 
             }
+            group(IFPMNT)
+            {
+                Caption = 'Payment Sync';
+                field("Enable Payment Sync"; EnableIFPMNT) { }
+                field("IF Payment Data Definition"; IFPMNTDataDefinitionFileName) { }
+                field("IF Payment Data Response"; IFPMNTDataResponseFileName) { }
+                field("IF Payment Last Sync Date"; IFPMNTLastSyncDate) { }
+                field("IF Payment Last Entry No."; IFPMNTLastDetailEntryNo) { }
+            }
 
         }
     }
