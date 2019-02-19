@@ -21,13 +21,30 @@ xmlport 50206 "NAC.IBMNAV.IFPMNTXMLP"
                 fieldelement(NAVEntryNo; NACIBMNAVIFPMNT.NAVEntryNo) { }
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.AMSDocumentNo) { }
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.NAVNITCode) { }
-                fieldelement(CompanyID; NACIBMNAVIFPMNT.PostingDate) { }
+                textelement(textPostingDate)
+                {
+                    trigger OnBeforePassVariable()
+                    begin
+                        textPostingDate := Format(NACIBMNAVIFPMNT.PostingDate,8,'<Year,2>/<Month,2>/<Day,2>');
+                    end;
+                }
+
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.CurrencyCode) { }
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.Amount) { }
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.AmountLCY) { }
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.PaymentReference) { }
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.PaymentReferencyType) { }
-                fieldelement(CompanyID; NACIBMNAVIFPMNT.InvoiceFullyPaid) { }
+
+                textelement(textInvoicePaid)
+                {
+                    trigger OnBeforePassVariable()
+                    begin
+                        if NACIBMNAVIFPMNT.InvoiceFullyPaid then
+                            textInvoicePaid := '1'
+                        else
+                            textInvoicePaid := '0';
+                    end;
+                }
             }
         }
     }
