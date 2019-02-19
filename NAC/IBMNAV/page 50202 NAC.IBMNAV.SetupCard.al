@@ -163,6 +163,20 @@ page 50202 "NAC.IBMNAV.SetupCard"
                     iBMRateSync.Code();
                 end;
             }
+            action(ProcessIFPMNT)
+            {
+                Caption = 'Process Payments Sync';
+                Image = Post;
+                Promoted = true;
+                PromotedIsBig = true;
+                trigger OnAction();
+                var
+                    iBMPaymentSync: Codeunit "NAC.IBMNAV.PaymentSync";
+                begin
+                    iBMPaymentSync.Code();
+                end;
+            }
+
             action(ProcessIFXTHIRD)
             {
                 Caption = 'Process THIRD Sync';

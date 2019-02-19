@@ -40,6 +40,7 @@ codeunit 50209 "NAC.IBMNAV.PaymentSync"
         detailedCustomerLedgerEntry: Record "Detailed Cust. Ledg. Entry";
         lastProcessedEntryNo: Integer;
     begin
+        iFPMNT.DeleteAll();
         // 1. Collection and populate table IFXTHIRD with eligable customers and vendor accross companies
         if company.FindFirst() then begin
             repeat
