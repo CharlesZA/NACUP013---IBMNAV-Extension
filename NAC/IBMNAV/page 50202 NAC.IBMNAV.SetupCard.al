@@ -56,6 +56,7 @@ page 50202 "NAC.IBMNAV.SetupCard"
             {
                 Caption = 'Payment Sync';
                 field("Enable Payment Sync"; EnableIFPMNT) { }
+                field("IF Pyment Company ID"; IFPMNTCompanyID){}
                 field("IF Payment Data Definition"; IFPMNTDataDefinitionFileName) { }
                 field("IF Payment Data Response"; IFPMNTDataResponseFileName) { }
                 field("IF Payment Last Sync Date"; IFPMNTLastSyncDate) { }
