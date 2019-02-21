@@ -30,8 +30,20 @@ xmlport 50206 "NAC.IBMNAV.IFPMNTXMLP"
                 }
 
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.CurrencyCode) { }
-                fieldelement(CompanyID; NACIBMNAVIFPMNT.Amount) { }
-                fieldelement(CompanyID; NACIBMNAVIFPMNT.AmountLCY) { }
+                textelement(textAmount)
+                {
+                    trigger OnBeforePassVariable()
+                    begin
+                        textAmount := Format(NACIBMNAVIFPMNT.Amount,0,'<Sign><Integer><Decimals>');
+                    end;
+                }
+                textelement(textAmountLCY)
+                {
+                    trigger OnBeforePassVariable()
+                    begin
+                        textAmountLCY := format(NACIBMNAVIFPMNT.AmountLCY,0,'<Sign><Integer><Decimals>');
+                    end;
+                }
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.PaymentReference) { }
                 fieldelement(CompanyID; NACIBMNAVIFPMNT.PaymentReferencyType) { }
 

@@ -87,9 +87,10 @@ codeunit 50209 "NAC.IBMNAV.PaymentSync"
                                         end;
                                     end;
                                 until detailedCustomerLedgerEntry.Next() = 0;
+                                iBMSetupCompany.IFPMNTLastDetailEntryNo := lastProcessedEntryNo;
                             end;
 
-                            iBMSetupCompany.IFPMNTLastDetailEntryNo := lastProcessedEntryNo;
+                            
                             iBMSetupCompany.IFPMNTLastSyncDate := Today();
                             iBMSetupCompany.Modify(false);
 
