@@ -30,6 +30,44 @@ codeunit 50204 "NAC.IBMNAV.InsertGenJnlLine"
         genJnlLine."NAC.IBMNAV Transaction Code" := rec.TID;
         genJnlLine."NAC.IBMNAV Transaction No." := rec.ID;
 
+//>> Record IBM Fields
+        genJnlLine.TC := rec.TC;
+        genJnlLine.DIM1 := rec.DIM1;
+        genJnlLine.DIM2 := rec.DIM2;
+        genJnlLine.DIM3 := rec.DIM3;
+        genJnlLine.DIM4 := rec.DIM4;
+        genJnlLine.DIM5 := rec.DIM5;
+        genJnlLine.DIM6 := rec.DIM6;
+        genJnlLine.DIM7 := rec.DIM7;
+        genJnlLine.DIM8 := rec.DIM8;
+
+        genJnlLine.DOCNO := rec.DOCNO;
+        genJnlLine.ENV := rec.ENV;
+        genJnlLine.POSTDAT := rec.POSTDAT;
+        genJnlLine.DOCDAT := rec.DOCDAT;
+        genJnlLine.DOCTYP := rec.DOCTYP;
+
+        genJnlLine.ACCTNO := rec.ACCTNO;
+        genJnlLine.ACCTYP := rec.ACCTYP;
+        genJnlLine.TRND := rec.TRND;
+        genJnlLine.EXTDOC := rec.EXTDOC;
+
+        genJnlLine.CURR := rec.CURR;
+        genJnlLine.XRATE := rec.XRATE;
+        genJnlLine.VALUE := rec.VALUE;
+        genJnlLine.VATGRP := rec.VATGRP;
+
+        genJnlLine.TUSER := rec.TUSER;
+        genJnlLine.TDATE := rec.TDATE;
+        genJnlLine.TTIME := rec.TTIME;
+
+        genJnlLine.PDF := rec.PDF;
+
+        genJnlLine.ERR := rec.ERR;
+        genJnlLine.RESCD := rec.RESCD;
+
+//<< Record IBM Fields
+
         genJnlLine."Source Code" := sourceCodeSetup."NAC.IBMNAV";
         genJnlLine."System-Created Entry" := true;
 
