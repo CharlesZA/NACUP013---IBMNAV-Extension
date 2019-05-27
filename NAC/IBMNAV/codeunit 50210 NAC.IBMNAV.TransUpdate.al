@@ -2,7 +2,7 @@
 
 codeunit 50210 "NAC.IBMNAV.TransUpdate"
 {
-
+    Permissions = tabledata "G/L Entry"=m;
     trigger OnRun()
     begin
         if Confirm('Do you want to update extended tables with transaction history information?\\This will take a moment to run through.') then begin
