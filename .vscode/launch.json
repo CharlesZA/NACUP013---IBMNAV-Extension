@@ -6,8 +6,8 @@
             "request": "launch",
             "name": "Your own server",
             "server": "http://localhost",
-            "port": 7069,
-            "serverInstance": "NAVTEST",
+            "port": 7059,
+            "serverInstance": "NAVLIVE",
             "authentication": "Windows",
             "startupObjectId": 50202,
             "schemaUpdateMode": "Synchronize"       
