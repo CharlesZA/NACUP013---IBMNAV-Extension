@@ -223,6 +223,15 @@ page 50202 "NAC.IBMNAV.SetupCard"
                     Modify(false);
                 end;
             }
+            action(ExeTempScripts)
+            {
+                Caption = 'Execute Temp Script';
+                Image = ExecuteBatch;
+                trigger OnAction()
+                begin
+                    IF Confirm('Are you sure?') then Codeunit.Run(CODEUNIT::"NAC.IBMNAV.TempScripts");
+                end;
+            }
         }
     }
 
